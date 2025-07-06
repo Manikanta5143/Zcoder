@@ -6,8 +6,11 @@ const userSignIn = async (req, res) => {
     username = username.trim();
     password = password.trim();
 
+    console.log('Login attempt for username:', username); // Debug log
+
     // Check for empty username or password
     if (!username || !password) {
+        console.log('Empty credentials provided');
         return res.json({
             status: "Failed",
             message: "Empty credentials supplied."
@@ -15,9 +18,15 @@ const userSignIn = async (req, res) => {
     }
 
     try {
-        // Check if user exists
-        const data = await user.find({ username });
+        // Find by username OR email
+        const data = await user.find({
+            $or: [{ username }, { email: username }]
+        });
+        
+        console.log('Found users:', data.length); // Debug log
+        
         if (data.length === 0) {
+            console.log('No user found with username/email:', username);
             return res.json({
                 status: "Failed",
                 message: "Invalid credentials supplied."
@@ -26,9 +35,16 @@ const userSignIn = async (req, res) => {
 
         // User exists
         const userData = data[0];
+        console.log('User found:', { 
+            _id: userData._id, 
+            username: userData.username, 
+            email: userData.email, 
+            verified: userData.verified 
+        }); // Debug log
 
         // Check if user is verified
         if (!userData.verified) {
+            console.log('User not verified:', userData.username);
             return res.json({
                 status: "Failed",
                 message: "User is not verified. Please sign up or resend verification email."
@@ -37,19 +53,28 @@ const userSignIn = async (req, res) => {
 
         // Compare passwords
         const isMatch = await bcrypt.compare(password, userData.password);
+        console.log('Password match:', isMatch); // Debug log
+        
         if (isMatch) {
-            return res.json({
+            // Return a flat user object
+            const userResponse = {
                 status: "Success",
-                message: "Signin successful",
-                result: userData
-            });
+                _id: userData._id,
+                username: userData.username,
+                email: userData.email,
+                verified: userData.verified
+            };
+            console.log('Login successful, returning:', userResponse); // Debug log
+            return res.json(userResponse);
         } else {
+            console.log('Password mismatch for user:', userData.username);
             return res.json({
                 status: "Failed",
                 message: "Invalid password entered."
             });
         }
     } catch (error) {
+        console.error('Login error:', error);
         return res.json({
             status: "Failed",
             message: "An error occurred during signin.",

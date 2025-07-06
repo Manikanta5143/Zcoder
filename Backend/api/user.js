@@ -110,4 +110,37 @@ router.post('/signin', async (req, res) => {
   }
 });
 
+// Test endpoint to check user verification status
+router.get('/test-user/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ 
+      $or: [{ username }, { email: username }] 
+    });
+    
+    if (!user) {
+      return res.json({
+        found: false,
+        message: 'User not found'
+      });
+    }
+    
+    return res.json({
+      found: true,
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        verified: user.verified
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'failed',
+      message: 'An error occurred while testing user',
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;

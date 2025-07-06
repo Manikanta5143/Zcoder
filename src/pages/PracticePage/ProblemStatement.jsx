@@ -5,12 +5,11 @@ import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './ProblemStatement.module.css'
 import { IoIosArrowDown,IoIosArrowUp, IoMdBookmark } from "react-icons/io";
 import {useAuthContext} from '../../hooks/useAuthContext';
+import { useProblemStatementApi } from '../../hooks/useProblemStatementApi';
+import { useQuestionsApi } from '../../hooks/useQuestionsApi';
 
 const ProblemStatement = () => {
   const { titleSlug } = useParams();
-  const [problem, setProblem] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [solution, setSolution] = useState('');
   const [language, setLanguage] = useState('javascript'); // State to track selected language
   const [solutions, setSolutions] = useState([]);
@@ -22,68 +21,61 @@ const ProblemStatement = () => {
   const [alertShown, setAlertShown] = useState(false);
   
   const navigate = useNavigate();
-  const {userLogin,isAuthenticated} = useAuthContext();
+  const { user, isAuthenticated } = useAuthContext();
   const [bookmarks, setBookmarks] = useState([]);
   
+  // Use the custom hook for API handling
+  const {
+    problem,
+    loading,
+    error
+  } = useProblemStatementApi(titleSlug);
+  
+  const { problems, loading: questionsLoading, error: questionsError } = useQuestionsApi();
+  
   useEffect(() => {
-    // Fetch user's bookmarks when userLogin changes
-    if (userLogin) {
-      fetchBookmarks(userLogin.result._id);
+    // Fetch user's bookmarks when user changes
+    if (user && user._id) {
+      fetchBookmarks(user._id);
+    } else {
+      // If no user, set empty bookmarks
+      setBookmarks([]);
     }
-  }, [userLogin]);
+  }, [user]);
   
   const fetchBookmarks = async (userId) => {
     try {
       const response = await fetch(`/user/bookmarks/${userId}`);
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
+        console.log('Bookmarks data:', data);
 
-        // Extract all solutionIds from the data
+        // Extract all solutionIds from the data with proper null checks
         const allSolutionIds = data.reduce((acc, bookmark) => {
+          if (bookmark && bookmark.solutions && Array.isArray(bookmark.solutions)) {
           bookmark.solutions.forEach(solution => {
+              // Check if solution has _id directly (new structure) or solutionId._id (old structure)
+              if (solution && solution._id) {
+                acc.push(solution._id);
+              } else if (solution && solution.solutionId && solution.solutionId._id) {
             acc.push(solution.solutionId._id);
+              }
           });
+          }
           return acc;
         }, []);
-        // Extract sol._id values from data into an array
-        //const bookmarkIds = data.map(bookmark => bookmark.solutions);
-        // setBookmarks(data);
+        
         console.log('All Solution IDs:', allSolutionIds);
-
         setBookmarks(allSolutionIds);
       } else {
         console.error('Failed to fetch bookmarks');
+        setBookmarks([]); // Set empty array on error
       }
     } catch (error) {
       console.error('Error fetching bookmarks:', error);
+      setBookmarks([]); // Set empty array on error
     }
   };
-  
-  // const [bookmarks, setBookmarks] = useState(() => {
-  //   const storedBookmarks = localStorage.getItem('bookmarks');
-  //   return storedBookmarks? JSON.parse(storedBookmarks) : [];
-  // });
-  
-  // useEffect(() => {
-  //   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  // }, [bookmarks]);
-
-
-  useEffect(() => {
-    const fetchProblemStatement = async () => {
-      try {
-        const response = await fetch(`https://alfa-leetcode-api.onrender.com/select?titleSlug=${titleSlug}`);
-        const data = await response.json();
-        setProblem(data);
-      } catch (error) {
-        setError('Failed to fetch problem statement');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProblemStatement();
-  }, [titleSlug]);
 
   const handleSolutionChange = (e) => {
     setSolution(e.target.value);
@@ -94,7 +86,6 @@ const ProblemStatement = () => {
     setLanguage(e.target.value);
   };
 
-
   const handlePostSolution = async () => {
     if(!isAuthenticated){
       if (!alertShown) {
@@ -104,13 +95,26 @@ const ProblemStatement = () => {
       }
       return;
     }
+
+    // Check if problem data is available
+    if (!problem || !problem.questionTitle || !problem.topicTags) {
+      alert('Problem data is not available. Please refresh the page.');
+      return;
+    }
+
+    // Check if user data is available
+    if (!user || !user._id || !user.username) {
+      alert('User data is not available. Please log in again.');
+      return;
+    }
+
      try{
       const response = await fetch('/user/solutions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId:userLogin.result._id, titleSlug, title:problem.questionTitle, solution, language, username:userLogin.result.username, topicTags: problem.topicTags}),
+        body: JSON.stringify({ userId:user._id, titleSlug, title:problem.questionTitle, solution, language, username:user.username, topicTags: problem.topicTags}),
       });
       console.log(response);
       if (response.ok) {
@@ -126,21 +130,17 @@ const ProblemStatement = () => {
       alert('Error posting solution');
     }
   };
-
-
-
-
-  
-
   
   const handleBookmark = async (sol) => {
-    const isBookmarked = bookmarks.includes(sol._id);
+    // Check if user is authenticated
+    if (!user || !user._id) {
+      alert('You need to be logged in to bookmark solutions.');
+      return;
+    }
 
-      
-  
+    const isBookmarked = bookmarks.includes(sol._id);
     
     if(!isBookmarked){
-      
       try {
         const response = await fetch('/user/bookmarks', {
           method: 'POST',
@@ -149,7 +149,7 @@ const ProblemStatement = () => {
           },
           body: JSON.stringify({
             solutionId:sol._id,
-            userId:userLogin.result._id, 
+            userId:user._id, 
             title:problem.questionTitle,
             titleSlug,
             language: sol.language,
@@ -158,10 +158,8 @@ const ProblemStatement = () => {
           }),
         });
         if (response.ok) {
-       
           setBookmarks((prevBookmarks) => [...prevBookmarks, sol._id]);
           console.log(bookmarks);
-
           alert('Solution bookmarked successfully');
         } else {
           alert('Failed to bookmark solution');
@@ -171,8 +169,7 @@ const ProblemStatement = () => {
         }
     }else{
       try {
-        
-        const response = await fetch(`/user/bookmarks/${userLogin.result._id}/${titleSlug}/${sol._id}`, {
+        const response = await fetch(`/user/bookmarks/${user._id}/${titleSlug}/${sol._id}`, {
           method: 'DELETE',
         });
       
@@ -190,22 +187,21 @@ const ProblemStatement = () => {
       }
     } 
   };
-    
-
-
-
-
-
-
 
   const handlePostComment = async (solutionId, comment) => {
+    // Check if user is authenticated
+    if (!user || !user._id) {
+      alert('You need to be logged in to post comments.');
+      return;
+    }
+
     try {
       const response = await fetch(`/user/comments/${solutionId}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: comment, userId:userLogin.result._id, solutionId:solutionId, username : userLogin.result.username  }),
+        body: JSON.stringify({ content: comment, userId:user._id, solutionId:solutionId, username : user.username  }),
       });
       console.log(response);
       if (response.ok) {
@@ -252,6 +248,7 @@ const ProblemStatement = () => {
       alert('Failed to fetch solutions');
     }
   };
+  
   const toggleSolution = (id) => {
     setActiveSolution(activeSolution === id ? null : id);
   };
@@ -259,18 +256,46 @@ const ProblemStatement = () => {
   const toggleComment = (id) =>{
     setVisibleComments(visibleComments === id ? null : id);
   }
+
   if (loading) {
-    return <div className='loading'>Loading...</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}></div>
+        <div className={styles.loadingText}>Loading problem statement...</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className={styles.errorContainer}>
+        <h3>Error Loading Problem</h3>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className={styles.retryButton}>
+          Reload Page
+        </button>
+      </div>
+    );
+  }
+
+  if (!problem) {
+    return (
+      <div className={styles.errorContainer}>
+        <h3>Problem Not Found</h3>
+        <p>The requested problem could not be found.</p>
+        <button onClick={() => navigate('/practice')} className={styles.backButton}>
+          Back to Practice
+        </button>
+      </div>
+    );
   }
 
   return (
     <div className={styles.problemStatementContainer}>
       <div className={styles.problemStatement}>
+        <div className={styles.problemHeader}>
         <p className={styles.title}>{problem.questionTitle}</p>
+        </div>
         <div className={styles.questionStatement} dangerouslySetInnerHTML={{ __html: problem.question }} />
         <p>Hints</p>
         <div className={styles.questionHint} dangerouslySetInnerHTML={{ __html: problem.hints }} />
@@ -296,8 +321,6 @@ const ProblemStatement = () => {
                   <p><strong>Language used:</strong> {sol.language}</p>
                   <p>Posted by:{sol.username}</p>
                   <p><strong>Posted at:</strong> {new Date(sol.createdAt).toLocaleString()}</p>
-                  {/* <IoMdBookmark className={`${styles.icon} ${bookmarks.solutions.some(solution => solution.solutionId === sol._id)? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} /> */}
-                  
                   <IoMdBookmark className={`${styles.icon} ${bookmarks.includes(sol._id)? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} />
                   {activeSolution === sol._id ? <IoIosArrowDown className={styles.icon}/> : <IoIosArrowUp className={styles.icon} /> }
                 </div>  
@@ -306,22 +329,17 @@ const ProblemStatement = () => {
                     {sol.solution}
                   </SyntaxHighlighter>
                   <button className={styles.button} onClick={() => fetchComments(sol._id)}>View Comments</button> 
-                  {/* Conditionally render comments based on availability */}
                   { showComments && comments[sol._id] && (
                     <div className={styles.comments}>
-                      {/* Map through comments for this solution and display them */}
                       {comments[sol._id].map((comment) => (
                         <div key={comment._id} className={styles.comment}>
                           <p className={styles.commentContent}>{comment.content}</p>
-                          {/* Optionally display username who posted the comment (if available) */}
                           <div className={styles.userData}>
                             {comment.username && <p>Posted by: {new Date(comment.createdAt).toLocaleString()}</p>}
                             {comment.username && <p>Posted by: {comment.username}</p>}
                           </div>
-                          
                         </div>
                       ))}
-                      {/* Add a form to post a new comment */}
                       <form onSubmit={(e) => {
                         e.preventDefault();
                         const comment = e.target.elements.commentInput.value;

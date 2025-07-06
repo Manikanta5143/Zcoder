@@ -3,6 +3,8 @@ import styles from './Profile.module.css'
 import axios from 'axios'
 import { AuthContext } from '../../AuthContext'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import { useNavigate } from 'react-router-dom'
+import './ProfileBubbles.css'
 
 
 // import { useAuthContext } from '../../hooks/useAuthContext'
@@ -19,18 +21,23 @@ const Profile = () => {
   const [newTechStack, setNewTechStack] = useState('');
   const [newLanguage, setNewLanguage] = useState('');
   const [newFriend, setNewFriend] = useState('');
-  const {isAuthenticated,userLogin,isEdit,userr} = useAuthContext()
+  const { isAuthenticated, user } = useAuthContext()
   const [handle, setHandle] = useState('');
   const [handles, setHandles] = useState([]);
+  const navigate = useNavigate()
   
   
  
 
   useEffect(() => {
-    if (userLogin) {
-      fetchUserData(userLogin.result._id);
+    if (!isAuthenticated) {
+      navigate('/login')
+      return
     }
-  }, [userLogin]);
+    if (user && user._id) {
+      fetchUserData(user._id)
+    }
+  }, [user, isAuthenticated])
 
   const fetchUserData = async (userId) => {
     try {
@@ -49,7 +56,7 @@ const Profile = () => {
     try {
       const updatedStacks = [...techStacks];
       updatedStacks.splice(index, 1);
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/techstacks`, { techStacks: updatedStacks });
+      await axios.put(`http://localhost:8008/user/${user._id}/techstacks`, { techStacks: updatedStacks });
       setTechStacks(updatedStacks);
       setMessage('Tech stack deleted successfully');
     } catch (error) {
@@ -61,7 +68,7 @@ const Profile = () => {
     try {
       const updatedStacks = [...techStacks];
       updatedStacks[index] = updatedStack;
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/techstacks`, { techStacks: updatedStacks });
+      await axios.put(`http://localhost:8008/user/${user._id}/techstacks`, { techStacks: updatedStacks });
       setTechStacks(updatedStacks);
       setMessage('Tech stack updated successfully');
     } catch (error) {
@@ -73,7 +80,7 @@ const Profile = () => {
     if (newTechStack === '') return;
     try {
       const updatedStacks = [...techStacks, newTechStack];
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/techstacks`, { techStacks: updatedStacks });
+      await axios.put(`http://localhost:8008/user/${user._id}/techstacks`, { techStacks: updatedStacks });
       setTechStacks(updatedStacks);
       setNewTechStack('');
       setMessage('Tech stack added successfully');
@@ -86,7 +93,7 @@ const Profile = () => {
     try {
       const updatedLanguages = [...languages];
       updatedLanguages.splice(index, 1);
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/languages`, { languages: updatedLanguages });
+      await axios.put(`http://localhost:8008/user/${user._id}/languages`, { languages: updatedLanguages });
       setLanguages(updatedLanguages);
       setMessage('Language deleted successfully');
     } catch (error) {
@@ -98,7 +105,7 @@ const Profile = () => {
     try {
       const updatedLanguages = [...languages];
       updatedLanguages[index] = updatedLanguage;
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/languages`, { languages: updatedLanguages });
+      await axios.put(`http://localhost:8008/user/${user._id}/languages`, { languages: updatedLanguages });
       setLanguages(updatedLanguages);
       setMessage('Language updated successfully');
     } catch (error) {
@@ -110,7 +117,7 @@ const Profile = () => {
     if (newLanguage === '') return;
     try {
       const updatedLanguages = [...languages, newLanguage];
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/languages`, { languages: updatedLanguages });
+      await axios.put(`http://localhost:8008/user/${user._id}/languages`, { languages: updatedLanguages });
       setLanguages(updatedLanguages);
       setNewLanguage('');
       setMessage('Language added successfully');
@@ -122,7 +129,7 @@ const Profile = () => {
   const handleDeleteFriend = async ( friendUsername) => {
     try {
       const updatedFriends = friends.filter(friend => friend !== friendUsername);
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/friends`, { friends: updatedFriends });
+      await axios.put(`http://localhost:8008/user/${user._id}/friends`, { friends: updatedFriends });
       setFriends(updatedFriends);
       alert('Friend deleted successfully')
       // setMessage('Friend deleted successfully');
@@ -149,7 +156,7 @@ const Profile = () => {
     if (!searchResult) return;
     try {
       const friendUsername = searchResult.username;
-      await axios.put(`http://localhost:8008/user/${userLogin.result._id}/add-friend`, { friendUsername });
+      await axios.put(`http://localhost:8008/user/${user._id}/add-friend`, { friendUsername });
       setFriends([...friends, friendUsername]);
       // setMessage('Friend added successfully');
       setSearchUsername('');
@@ -162,15 +169,15 @@ const Profile = () => {
 
 
   useEffect(() => {
-    if(userLogin){
+    if(user && user._id){
       fetchHandles();
     }
     
-  }, [userLogin]);
+  }, [user]);
 
   const fetchHandles = async () => {
     try {
-      const response = await axios.get(`http://localhost:8008/user/${userLogin.result._id}/handles`);
+      const response = await axios.get(`http://localhost:8008/user/${user._id}/handles`);
       const handlesData = await Promise.all(
         response.data.map(async (handle) => {
           const ratingResponse = await axios.get(`https://codeforces.com/api/user.rating?handle=${handle}`);
@@ -189,7 +196,7 @@ const Profile = () => {
   const handleAddHandle = async () => {
     try {
    // Replace with actual user ID
-      await axios.post(`http://localhost:8008/user/${userLogin.result._id}/handles`, { handle } );
+      await axios.post(`http://localhost:8008/user/${user._id}/handles`, { handle } );
       fetchHandles();
       setHandle('');
       setMessage('Handle added successfully');
@@ -200,7 +207,7 @@ const Profile = () => {
 
   const handleDeleteHandle = async (handleToDelete) => {
     try {
-      await axios.delete(`http://localhost:8008/user/${userLogin.result._id}/handles/${handleToDelete}`);
+      await axios.delete(`http://localhost:8008/user/${user._id}/handles/${handleToDelete}`);
       fetchHandles();
       setMessage('Handle deleted successfully');
     } catch (error) {
@@ -213,29 +220,29 @@ const Profile = () => {
     <h1 className={styles.title}>User Profile</h1>
     <div className={styles.Appp}>
       
-      {userLogin && (
+      {user && (
       <>
-        <div className={styles.profile}>
-          <div className={styles['user-info']}>
+        <div className={styles.profile + ' profile-bubble'}>
+          <div className={styles['user-info'] + ' profile-bubble-section'}>
             <div className={styles.userInfo} >
-              <p>Username:</p>
-              <p>{userLogin.result.username}</p>
+              <p className='profile-bubble-title'>Username:</p>
+              <p>{user.username}</p>
             </div>
             <div className={styles.userInfo}>
-              <p>Email: </p>
-              <p>{userLogin.result.email}</p>
+              <p className='profile-bubble-title'>Email: </p>
+              <p>{user.email}</p>
             </div>
           </div>
 
-          <div className={styles.techContainer}>
-            <h2 className={styles.ph2} >Tech Stacks</h2>
-            <ul className={styles.techStacks} >
+          <div className={styles.techContainer + ' profile-bubble-section'}>
+            <h2 className={styles.ph2 + ' profile-bubble-title'} >Tech Stacks</h2>
+            <ul className={styles.techStacks + ' profile-bubble-list'} >
               {techStacks.map((stack, index) => (
-                <li className={styles.techStack} key={index}>
+                <li className={styles.techStack + ' profile-bubble-item'} key={index}>
                   {stack}
                   <div>
-                    <button className={styles.pbutton} onClick={() => handleDeleteTechStack(index)}>Delete</button>
-                    <button className={styles.pbutton} onClick={() => {
+                    <button className={styles.pbutton + ' profile-bubble-btn'} onClick={() => handleDeleteTechStack(index)}>Delete</button>
+                    <button className={styles.pbutton + ' profile-bubble-btn'} onClick={() => {
                       const updatedStack = prompt('Edit Tech Stack:', stack);
                       if (updatedStack) handleEditTechStack(index, updatedStack);
                     }}>Edit</button>
@@ -249,18 +256,18 @@ const Profile = () => {
               onChange={(e) => setNewTechStack(e.target.value)}
               placeholder="New Tech Stack"
             />
-            <button className={styles.pbutton} onClick={handleAddTechStack}>Add Tech Stack</button>
+            <button className={styles.pbutton + ' profile-bubble-btn'} onClick={handleAddTechStack}>Add Tech Stack</button>
           </div>
           
-          <div className={styles.languageContainer}>
-            <h2 className={styles.ph2} >Languages</h2>
-            <ul className={styles.languages} >
+          <div className={styles.languageContainer + ' profile-bubble-section'}>
+            <h2 className={styles.ph2 + ' profile-bubble-title'} >Languages</h2>
+            <ul className={styles.languages + ' profile-bubble-list'} >
               {languages.map((language, index) => (
-                <li className={styles.languageItem} key={index}>
+                <li className={styles.languageItem + ' profile-bubble-item'} key={index}>
                   {language}
                   <div>
-                    <button className={styles.pbutton} onClick={() => handleDeleteLanguage(index)}>Delete</button>
-                    <button className={styles.pbutton} onClick={() => {
+                    <button className={styles.pbutton + ' profile-bubble-btn'} onClick={() => handleDeleteLanguage(index)}>Delete</button>
+                    <button className={styles.pbutton + ' profile-bubble-btn'} onClick={() => {
                       const updatedLanguage = prompt('Edit Language:', language);
                       if (updatedLanguage) handleEditLanguage(index, updatedLanguage);
                     }}>Edit</button>
@@ -274,54 +281,54 @@ const Profile = () => {
               onChange={(e) => setNewLanguage(e.target.value)}
               placeholder="New Language"
             />
-            <button className={styles.pbutton} onClick={handleAddLanguage}>Add Language</button>
+            <button className={styles.pbutton + ' profile-bubble-btn'} onClick={handleAddLanguage}>Add Language</button>
           </div>  
         </div>
  
-        <div className={styles.friends}>
+        <div className={styles.friends + ' profile-bubble'}>
 
-          <div className={styles.searchUser}>
-            <p className={styles.p} >Search User</p>
+          <div className={styles.searchUser + ' profile-bubble-section'}>
+            <p className={styles.p + ' profile-bubble-title'} >Search User</p>
             <input className={styles.pinput}  
               type="text"
               value={searchUsername}
               onChange={(e) => setSearchUsername(e.target.value)}
               placeholder="Search Username"
             />
-            <button className={styles.searchButton} onClick={handleSearchUser}>Search</button>
+            <button className={styles.searchButton + ' profile-bubble-btn'} onClick={handleSearchUser}>Search</button>
           </div>
           
 
-          <div className={styles.userDisplay}>
+          <div className={styles.userDisplay + ' profile-bubble-section'}>
             {/* {message && <p className={styles.message}>{message}</p>} */}
             {searchResult && (
               <>
-                <p className={styles.pp} >User found: {searchResult.username}</p>
-                <button className={styles.pbutton} onClick={handleAddFriend}>Add Friend</button>
+                <p className={styles.pp + ' profile-bubble-title'} >User found: {searchResult.username}</p>
+                <button className={styles.pbutton + ' profile-bubble-btn'} onClick={handleAddFriend}>Add Friend</button>
               </>
             )}
           </div>
           
 
-          <div className={styles.friendsContainer}>
-            <h2 className={styles.ph2} >Friends</h2>
-            <ul className={styles.friendsList} >
+          <div className={styles.friendsContainer + ' profile-bubble-section'}>
+            <h2 className={styles.ph2 + ' profile-bubble-title'} >Friends</h2>
+            <ul className={styles.friendsList + ' profile-bubble-list'} >
               {friends.map((friend, index) => (
-                <li className={styles.friendsItem} key={index}>
+                <li className={styles.friendsItem + ' profile-bubble-item'} key={index}>
                   {friend}
-                  <button className={styles.pbutton} onClick={() => handleDeleteFriend(friend)}>Delete</button>
+                  <button className={styles.pbutton + ' profile-bubble-btn'} onClick={() => handleDeleteFriend(friend)}>Delete</button>
                 </li>
               ))}
             </ul>
-            <div className={styles.ratings} >
-              <h1>Codeforces Handles and Ratings</h1>
+            <div className={styles.ratings + ' profile-bubble-section'} >
+              <h1 className={styles.ph2 + ' profile-bubble-title'}>Codeforces Handles and Ratings</h1>
               {handles.map(({ handle, currentRating }) => (
-                <div key={handle} className={styles.delete} >
+                <div key={handle} className={styles.delete + ' profile-bubble-item'} >
                   <p>{handle}: {currentRating}</p>
-                  <button className={styles.pbutton} onClick={() => handleDeleteHandle(handle)}>Delete</button>
+                  <button className={styles.pbutton + ' profile-bubble-btn'} onClick={() => handleDeleteHandle(handle)}>Delete</button>
                 </div>
               ))}
-              <div className={styles.input}>
+              <div className={styles.input + ' profile-bubble-section'}>
                 <input
                   type="text"
                   value={handle}
@@ -329,7 +336,7 @@ const Profile = () => {
                   placeholder="Enter Codeforces handle"
                   className={styles.pinput}
                 />
-                <button className={styles.pbutton}onClick={handleAddHandle} >
+                <button className={styles.pbutton + ' profile-bubble-btn'}onClick={handleAddHandle} >
                   Add Codeforces Handle
                 </button>
               </div>

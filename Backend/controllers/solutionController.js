@@ -39,4 +39,17 @@ const getUserSubmissions = async (req,res) =>{
   }
 };
 
-module.exports = { postSolution,getSolutionsByTitleSlug,getUserSubmissions };
+const deleteSolution = async (req, res) => {
+  const { solutionId } = req.params;
+  try {
+    const solution = await Solution.findByIdAndDelete(solutionId);
+    if (!solution) {
+      return res.status(404).json({ error: 'Solution not found' });
+    }
+    res.status(200).json({ message: 'Solution deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { postSolution, getSolutionsByTitleSlug, getUserSubmissions, deleteSolution };

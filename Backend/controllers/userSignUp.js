@@ -5,8 +5,6 @@ const  sendVerificationEmail  = require('./sendVerificationEmail');
 
 const userSignUp = async (req, res) => {
   try {
-
-    
     let { username, email, password } = req.body;
     username = username.trim();
     email = email.trim();
@@ -61,25 +59,17 @@ const userSignUp = async (req, res) => {
         console.log('New user details before saving:', newUser);
         const result = await newUser.save();
         console.log('User saved:', result);
+        // Send verification email (do not pass res for success)
+        sendVerificationEmail(result).catch(err => {
+          console.error('Verification email error:', err);
+        });
+        // Respond with a flat user object and status
         res.json({
-          result
-        })
-        sendVerificationEmail(result, res);
-        // Password handling
-        // const saltRounds = 10;
-        // const hashedPassword = await bcrypt.hash(password, saltRounds);
-        // const newUser = new user({
-        //   username,
-        //   email,
-        //   password:hashedPassword,
-        //   verified: false
-        // });
-
-        // const result = await newUser.save();
-        // sendVerificationEmail(result, res);
+          status: "Success",
+          message: "Signup successful! Please check your email to verify your account."
+        });
       }
     }
-    
   } catch (err) {
     console.error(err);
     res.json({

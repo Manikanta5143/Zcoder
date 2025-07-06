@@ -14,10 +14,46 @@ app.use(bodyParser());
 app.use(express.urlencoded({extended:true}));
 app.use(cors());
 
-connectToMongoDb('mongodb+srv://jajamabhijith2004:Devabhi2004@users.ralw0gb.mongodb.net/backend').then(()=>{
-    console.log('mongo connecrted')
-})
+connectToMongoDb('mongodb+srv://manikantamani90140:9014080550@cluster0.kfpifhg.mongodb.net/zcoderdb')
+  .then(() => {
+    console.log('mongo connected');
+  })
+  .catch(err => {
+    console.error('mongo connection error:', err);
+  });
 
+// --- Socket.IO and Chat Integration ---
+const http = require('http');
+const socketIo = require('socket.io');
+const Message = require('./model/message');
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: { origin: "*", methods: ["GET", "POST"] }
+});
+
+io.on('connection', (socket) => {
+  socket.on('join_room', (roomId) => {
+    socket.join(roomId);
+  });
+  socket.on('send_message', async (data) => {
+    // data: { roomId, sender, content, isGroup }
+    const msg = new Message({
+      roomId: data.roomId,
+      sender: data.sender,
+      content: data.content,
+      isGroup: data.isGroup
+      // timestamp will be set by default
+    });
+    await msg.save();
+    io.to(data.roomId).emit('receive_message', msg);
+  });
+});
+// --- End Socket.IO ---
+
+// --- Messages API ---
+const messagesApi = require('./api/messages');
+app.use('/api/messages', messagesApi);
+// --- End Messages API ---
 
 app.get('/user/:id', async (req, res) => {
     try {
@@ -90,8 +126,6 @@ app.get('/user/:id', async (req, res) => {
 
   app.get('/user/:id/handles', async (req, res) => {
     try {
-      // const userId = req.query.userId; // Replace with actual user ID retrieval method
-      // const user = await User.findById(userId);
       const user = await User.findById(req.params.id);
       res.json(user.codeforceshandles);
     } catch (error) {
@@ -101,11 +135,8 @@ app.get('/user/:id', async (req, res) => {
   
   app.post('/user/:id/handles', async (req, res) => {
     try {
-      // const userId = req.params.userId; // Replace with actual user ID retrieval method
       const handle = req.body.handle;
-      console.log(handle);
       const user = await User.findById(req.params.id);
-      console.log(user);
       if (!user.codeforceshandles.includes(handle)) {
         user.codeforceshandles.push(handle);
         await user.save();
@@ -118,7 +149,6 @@ app.get('/user/:id', async (req, res) => {
   
   app.delete('/user/:id/handles/:handle', async (req, res) => {
     try {
-
       const handleToDelete = req.params.handle;
       const user = await User.findById(req.params.id);
       user.codeforceshandles = user.codeforceshandles.filter(handle => handle !== handleToDelete);
@@ -129,12 +159,11 @@ app.get('/user/:id', async (req, res) => {
     }
   });
 
-
 app.use('/user', userRouter);
 app.use('/user',postRouter);
 app.use('/user',bookmarkRouter);
 app.use('/user',commentRouter);
 
-app.listen(port, ()=>{
+server.listen(port, ()=>{
     console.log(`server started at port ${port}`);
 })

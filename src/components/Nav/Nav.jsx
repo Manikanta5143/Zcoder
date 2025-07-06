@@ -30,22 +30,18 @@
 // export default Nav
 
 
-import React,{useState,useContext}from 'react'
+import React,{useState}from 'react'
 import { NavLink } from 'react-router-dom'
 import { GiHamburgerMenu } from "react-icons/gi"
-import { FaUser} from "react-icons/fa"
-import { AuthContext } from '../../AuthContext'
-import './Nav.css'
 import { useLogout } from '../../hooks/useLogout'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import './Nav.css'
+
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const {logout} = useLogout()
-  const {isAuthenticated,userLogin,isEdit,user} = useAuthContext()
+  const {isAuthenticated,user} = useAuthContext()
 
-  // const userInfo = JSON.parse(localStorage.getItem("user"));
-  // console.log(userInfo)
-  // const { state, dispatch } = useContext(AuthContext)
   const handleLogOut = () =>{
     logout()
   }
@@ -63,11 +59,11 @@ const Nav = () => {
           <li><NavLink to='/practice'>Practice</NavLink></li>
           <li><NavLink to='/submissions'>Submissions</NavLink></li>
           <li><NavLink to='/bookmarks'>Bookmarks</NavLink></li>
-          
-           {
-            isAuthenticated ? 
+          {
+            isAuthenticated && user && user.username ? 
               <>
-                <li><NavLink to='/profile'>{userLogin.result.username}</NavLink></li>
+                <li><NavLink to='/chat'>Chat</NavLink></li>
+                <li><NavLink to='/profile'>{user.username}</NavLink></li>
                 <li><NavLink to='/login' onClick={handleLogOut}>Logout</NavLink></li>
               </>
             :
@@ -75,18 +71,9 @@ const Nav = () => {
                 <li><NavLink to='/login'>Login</NavLink></li>
                 <li><NavLink to='/signup'>Signup</NavLink></li>
               </>
-           }
-            
-          
-          
-            
-        
-          
+          }
         </ul>
-          
-        
       </div>
-
   )
 }
 export default Nav

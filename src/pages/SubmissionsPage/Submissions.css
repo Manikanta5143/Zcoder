@@ -1,19 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
+
+@keyframes submissionPop {
+  0% { transform: scale(1); opacity: 0.6; }
+  60% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.submission-bubble {
+  background: linear-gradient(135deg,#1e66f7 0%, #1f4aae 100% );
+  color: #2eecb9;
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(255,210,0,0.12);
+  padding: 28px 32px;
+  margin: 28px 0;
+  animation: submissionPop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1.15rem;
+  position: relative;
+  overflow: hidden;
+}
+.submission-bubble-title {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffffe0;
+  margin-bottom: 10px;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(255,210,0,0.10);
+  display: block;
+  text-decoration: none;
+}
+.submission-bubble-tags {
+  margin-top: 10px;
+}
+.submission-bubble-tags .tag {
+  background: #b25ba1;
+  color: #fbfbfb;
+  border-radius: 12px;
+  padding: 4px 14px;
+  margin-right: 8px;
+  font-size: 1rem;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgb(59, 142, 124);
+  display: inline-block;
+}
+.submission-bubble-time {
+  font-size: 1rem;
+  color: #f7f1f1;
+  margin-top: 4px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 500;
+}
+
 :root{
-  --practice-background:black;
+  --practice-background:rgb(80, 149, 99);
   --ques-text:white;
+  --prob-clr:rgb(11, 2, 36)
 }
 
 [data-theme="light"]{
   --practice-background:linear-gradient(#5ab8ee,rgb(255, 255, 255),#5ab8ee);
   --ques-text:black;
+  --prob-clr:wheat
+
 }
 .problemStatementContainer {
   display: flex;
   gap: 30px;
   width: 100%;
   height: 100vh;
-  background-color:var(--practice-background);
+  background-color:var(--prob-clr);
 }
+
 .title{
   color: var(--ques-text);
   font-size: 30px;
@@ -72,4 +132,42 @@
 }
 .time{
   padding-right: 30px;
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #063810 0%, #0c5f2f 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Montserrat', Arial, sans-serif;
+  margin-top: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+  letter-spacing: 0.02em;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #107956 0%, #1f8c59 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 68, 68, 0.4);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

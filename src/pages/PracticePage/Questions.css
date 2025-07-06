@@ -1,14 +1,15 @@
 :root{
-  --filter-tag:black;
+  --filter-tag:rgb(24, 143, 161);
   --filter-border:white;
   --filter-text:white;
   --filter-checked:#007bff;
-  --filter-hover:rgb(73, 73, 161);
-  --ques-item:white;
+  --filter-hover:rgb(0, 195, 255);
+  --ques-item:rgb(255, 249, 249);
+  --ques-item-font-family: 'Montserrat', Arial, sans-serif;
 }
 
 [data-theme="light"]{
-  --filter-tag:white;
+  
   --filter-border:black;
   --filter-text:black;
   --filter-hover:rgb(95, 162, 244);
@@ -37,17 +38,20 @@
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   white-space: nowrap;
+  font-family: poppins;
+  color: #0f2678;
 }
 .tag-filters label span:hover{
   background-color: var(--filter-hover);
 }
 .tag-filters input[type="checkbox"] {
   display: none;
+  color: #3d16c9;
 }
 
 .tag-filters input[type="checkbox"]:checked + span {
   background-color: var(--filter-checked);
-  color: white;
+  color: rgb(255, 255, 255);
   border-color: var(--filter-checked);
 }
 
@@ -82,6 +86,7 @@
   align-items: flex-start;
   padding:10px 0 0 50px;
   border-bottom: 1px solid var(--ques-item);
+  font-family: var(--ques-item-font-family);
 }
 
 .question-item a {
@@ -90,6 +95,11 @@
   justify-content: space-between;
   text-decoration: none;
   color: var(--ques-item);
+}
+.question-item a:hover {
+  color:#b15ca9;
+  width:60vw;
+  text-decoration: underline;
 }
 
 
@@ -104,7 +114,7 @@
 
 
 .tag {
-  background-color: #007bff;
+  background-color: #4f25e6;
   color: #fff;
   padding: 4px 8px;
   margin-left: 5px;
@@ -140,4 +150,142 @@
 
 .pagination button.active {
   background-color: #0056b3;
+}
+.loading {
+  text-align: center;
+  font-size: 1.4rem;
+  padding: 2rem;
+  color: #333;
+}
+
+.error {
+  text-align: center;
+  color: red;
+  font-size: 1.2rem;
+  padding: 2rem;
+}
+
+.retry-button {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 1rem;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.retry-button:hover {
+  background-color: #0056b3;
+}
+.loading-spinner {
+  border: 8px solid #3d16c9; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1.5s linear infinite;
+  margin: 40px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 10px;
+  color: #0f2678;
+}
+
+/* New styles for improved API handling */
+.questions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 50px;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--ques-item);
+}
+
+.questions-header h2 {
+  margin: 0;
+  color: var(--ques-item);
+  font-family: var(--ques-item-font-family);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.refresh-button {
+  background: linear-gradient(135deg, #0d5a09 0%, #0d5b28 100%);
+  color: white;
+  border: none;
+  padding: 0px 12px; /* Reduced padding */
+  border-radius: 6px; /* Slightly smaller radius */
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 200;
+  font-size: 14px; /* Smaller font size */
+  transition: all 0.3s ease;
+  min-width: 80px; /* Reduced min-width */
+}
+
+.refresh-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #199c31 0%, #0c6a4e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 90, 9, 0.3);
+}
+
+.refresh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.error-note {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Enhanced error styling */
+.error {
+  text-align: center;
+  color: #dc3545;
+  font-size: 1.2rem;
+  padding: 2rem;
+  background: rgba(220, 53, 69, 0.1);
+  border-radius: 8px;
+  margin: 20px 50px;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.retry-button {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: var(--ques-item-font-family);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.retry-button:hover {
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
 }

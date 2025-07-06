@@ -38,7 +38,7 @@
   background-color: var(--box-background);
   border-radius: 10px;
   box-shadow: 0 10px 30px var(--box-background);
-  width: 100%;
+  width: 120%;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -103,4 +103,43 @@
   .list p {
     font-size: 0.875rem;
   }
+}
+
+/* Additional styles for new elements */
+.loading {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  margin: 2rem 0;
+}
+
+.error {
+  text-align: center;
+  color: #ff6b6b;
+  font-size: 1.1rem;
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-radius: 8px;
+}
+
+.fallback-note {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: rgba(255, 193, 7, 0.1);
+  border-radius: 8px;
+}
+
+.no-contests {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1.1rem;
+  margin: 2rem 0;
+  padding: 2rem;
+  background-color: var(--box-background);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px var(--box-background);
 }

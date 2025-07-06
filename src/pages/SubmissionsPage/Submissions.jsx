@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import TagFilter from '../../components/TagFilter/TagFilter';
 import Pagination from '../../components/Pagination/Pagination';
+import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 import { Link, useNavigate } from 'react-router-dom';
 import './Submissions.css'
 
@@ -15,26 +16,25 @@ const Submissions = () => {
   const questionsPerPage = 40;
   // const [alertShown, setAlertShown] = useState(false);
   const [message, setMessage] = useState('');
-  const {userLogin,isAuthenticated} = useAuthContext()
+  const { user, isAuthenticated } = useAuthContext();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
 
 
   
   useEffect(() => {
-    
-    if (userLogin) {
-      fetchSubmissions(userLogin.result._id);
-    }else{
+    if (isAuthenticated && user && user._id) {
+      fetchSubmissions(user._id);
+    } else {
       if (!message) {
         setMessage('You need to be logged in to view this page.');
         setTimeout(() => {
-          navigate('/login'); // Redirect to login page or another appropriate page
-        }, 3000); // Redirect after 3 seconds
+          navigate('/login');
+        }, 3000);
       }
-      
     }
-   
-  }, [userLogin]); // Run the effect when the user object changes
+  }, [user, isAuthenticated]);
 
   const fetchSubmissions = async (userId) => {
     try {
@@ -78,6 +78,42 @@ const Submissions = () => {
     setCurrentPage(1);
   };
 
+  const handleDeleteSubmission = async (submissionId) => {
+    setItemToDelete({ id: submissionId, type: 'submission' });
+    setShowDeleteDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    
+    try {
+      const response = await fetch(`/user/solutions/${itemToDelete.id}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        // Remove the deleted submission from the state
+        setSubmissions(prevSubmissions => 
+          prevSubmissions.filter(submission => submission._id !== itemToDelete.id)
+        );
+        alert('Submission deleted successfully');
+      } else {
+        alert('Failed to delete submission');
+      }
+    } catch (error) {
+      console.error('Error deleting submission:', error);
+      alert('Error deleting submission');
+    } finally {
+      setShowDeleteDialog(false);
+      setItemToDelete(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteDialog(false);
+    setItemToDelete(null);
+  };
+
   if(message){
     return <div className='loading'>Login to view this page</div>;
   }
@@ -98,31 +134,44 @@ const Submissions = () => {
       <div className="questions-list">
         <TagFilter tags={allTags} selectedTags={selectedTags} onTagChange={handleTagChange} />
 
+        {currentQuestions.length === 0 && (
+          <div style={{ textAlign: 'center', color: '#888', fontSize: '1.3rem', fontWeight: 600, margin: '32px 0' }}>
+            No Submissions
+          </div>
+        )}
         {currentQuestions.map((question) => (
-          <div key={question._id} className="question-item">
-            <Link to={`/submissions/${question.titleSlug}`}>
+          <div key={question._id} className="submission-bubble">
+            <Link to={`/submissions/${question.titleSlug}`} className="submission-bubble-title">
               {question.title}
-              <p className='time'>
+              <p className='submission-bubble-time'>
                 Submitted at: {isNaN(new Date(question.createdAt)) ? 'Invalid Date' : new Date(question.createdAt).toLocaleString()}
               </p>
             </Link>
-            
-            
-            <div className="tags">
-              
-              
+            <div className="submission-bubble-tags">
               {question.topicTags.map((tag, tagIndex) => (
                 <span key={tagIndex} className="tag">{tag.name}</span>
               ))}
-            
-              
             </div>
-           
-
+            <button 
+              className="delete-btn" 
+              onClick={() => handleDeleteSubmission(question._id)}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
       <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
+      
+      <ConfirmationDialog
+        isOpen={showDeleteDialog}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        title="Delete Submission"
+        message="Are you sure you want to delete this submission? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
     </>
 
     // <div className='submissions'>

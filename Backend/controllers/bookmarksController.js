@@ -77,3 +77,17 @@ exports.getBookmarks = async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve bookmarks' });
   }
 };
+
+exports.deleteBookmarkByTitle = async (req, res) => {
+  const { userId, titleSlug } = req.params;
+  try {
+    const bookmark = await Bookmark.findOneAndDelete({ userId, titleSlug });
+    if (!bookmark) {
+      return res.status(404).json({ error: 'Bookmark not found' });
+    }
+    res.status(200).json({ message: 'Bookmark deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Unable to delete bookmark' });
+  }
+};

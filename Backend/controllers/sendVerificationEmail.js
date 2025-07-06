@@ -17,9 +17,10 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-const sendVerificationEmail = async ({ _id, email }, res) => {
+const sendVerificationEmail = async ({ _id, email }) => {
     try {
-        const currentUrl = 'http://localhost:8008/';
+        // Use environment variable for base URL, fallback to localhost for dev
+        const currentUrl = process.env.VERIFICATION_BASE_URL || 'http://localhost:8008/'; // Set VERIFICATION_BASE_URL in .env for production
         const uniqueString = uuidv4();
         const verificationLink = `${currentUrl}user/verify/${_id}/${uniqueString}`;
 
@@ -50,33 +51,24 @@ const sendVerificationEmail = async ({ _id, email }, res) => {
         // Send the verification email
         await transporter.sendMail(verificationMailOptions);
 
-        // res.json({
-        //     status: "Pending",
-        //     message: "Verification email sent. Please check your email to verify your account.",
-        //     id:_id
-        // });
-        const data = await user.find({ email });
-        if (data.length === 0) {
-            return res.json({
-                status: "Failed",
-                message: "Invalid credentials supplied."
-            });
-        }
-
-        // User exists
-        // const userData = data[0];
-        // console.log(userData);
-        // res.json({
-        //     userId : data[0]._id,
-        //     email : data[0].email
-        // })
+        // No res.json here for success
+        // const data = await user.find({ email });
+        // if (data.length === 0) {
+        //     return res.json({
+        //         status: "Failed",
+        //         message: "Invalid credentials supplied."
+        //     });
+        // }
 
     } catch (error) {
         console.error(error);
-        res.json({
-            status: "Failed",
-            message: "An error occurred during the email verification process."
-        });
+        // Only use res if provided for error handling (optional)
+        // if (res) {
+        //   res.json({
+        //     status: "Failed",
+        //     message: "An error occurred during the email verification process."
+        //   });
+        // }
     }
 };
 

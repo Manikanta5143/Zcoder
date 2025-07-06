@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
- import { BrowserRouter,Routes,Route } from 'react-router-dom'
- import useLocalStorage from 'use-local-storage'
- import Profile from './pages/ProfilePage/Profile'
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter,Routes,Route } from 'react-router-dom'
+import useLocalStorage from 'use-local-storage'
+import Profile from './pages/ProfilePage/Profile'
 import Home from './pages/Home/Home'
 import Login from './pages/LoginPage/Login'
 import Nav from './components/Nav/Nav'
@@ -18,16 +18,34 @@ import Submissions from './pages/SubmissionsPage/Submissions'
 import SubmittedSolutions from './pages/SubmissionsPage/SubmittedSolutions'
 import './App.css'
 import { useAuthContext } from './hooks/useAuthContext'
+import ChatPage from './pages/ChatPage'
+import UserList from './components/Chat/UserList'
+import GroupList from './components/Chat/GroupList'
 
-
-
+const mockUsers = ['alice', 'bob', 'charlie', 'dave']
+const mockGroups = [
+  { id: 'general', name: 'General' },
+  { id: 'devs', name: 'Developers' }
+]
 
 const App = () => {
-  const {isAuthenticated} = useAuthContext()
+  const { user, isAuthenticated } = useAuthContext()
   const [isLight,setIsLight] = useLocalStorage("isLight",false)
+  const [chatPartner, setChatPartner] = useState(null)
+  const [group, setGroup] = useState(null)
+
+  // Reset chat state on logout
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setChatPartner(null)
+      setGroup(null)
+    }
+  }, [isAuthenticated])
+
   const toggleTheme = () => {
     setIsLight(!isLight)
   }
+
   return (
     <BrowserRouter>
     {/* cutom id-preferences for app */}
@@ -48,8 +66,29 @@ const App = () => {
         <Route path='/login' element={<Login/>}/> 
         <Route path='/signup' element={<Signup />}/>
         <Route path='/profile' element={<Profile/>}/>
+        <Route path='/chat' element={<ChatPage/>}/>
       </Routes>
       
+      {/* Remove always-visible chat UI. Chat is now only accessible via /chat route. */}
+      {/*
+      {isAuthenticated && user && (
+        <div style={{ display: 'flex', gap: 32 }}>
+          <div>
+            <UserList users={mockUsers} onSelectUser={u => { setChatPartner(u); setGroup(null); }} currentUser={user.username} />
+            <GroupList groups={mockGroups} onSelectGroup={g => { setGroup(g); setChatPartner(null); }} />
+          </div>
+          <div>
+            {chatPartner && (
+              <Chat currentUser={user.username} chatPartner={chatPartner} isGroup={false} />
+            )}
+            {group && (
+              <Chat currentUser={user.username} groupId={group.id} isGroup={true} />
+            )}
+            {!chatPartner && !group && <div>Select a user or group to chat.</div>}
+          </div>
+        </div>
+      )}
+      */}
       
         <Footer />
          
