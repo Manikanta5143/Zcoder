@@ -100,6 +100,7 @@ const Signup = () => {
           <div className={styles.inputBox}>
             <input
               name="username"
+              autoComplete='off'
               className={styles.input}
               type="text"
               placeholder="Username"
@@ -112,6 +113,7 @@ const Signup = () => {
           <div className={styles.inputBox}>
             <input
               name="email"
+              autoComplete='off'
               className={styles.input}
               type="email"
               placeholder="Email"
@@ -124,6 +126,7 @@ const Signup = () => {
           <div className={styles.inputBox}>
             <input
               name="password"
+              autoComplete='off'
               className={styles.input}
               type="password"
               placeholder="Password"

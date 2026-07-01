@@ -5,6 +5,7 @@ import { AuthContext } from '../../AuthContext'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useNavigate } from 'react-router-dom'
 import './ProfileBubbles.css'
+import Loader from '../../components/Loader/Loader'
 
 
 // import { useAuthContext } from '../../hooks/useAuthContext'

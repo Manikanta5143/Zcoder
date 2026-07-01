@@ -1,0 +1,247 @@
+/* ===========================
+        ROW
+=========================== */
+
+.submission-row{
+
+    display:grid;
+
+    grid-template-columns:
+        130px
+        2.2fr
+        130px
+        150px
+        100px;
+
+    align-items:center;
+
+    padding:14px 24px;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    transition:.25s;
+
+}
+
+.submission-row:hover{
+
+    background:#243447;
+
+}
+
+/* ===========================
+        DATE
+=========================== */
+
+.submission-date{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+.day{
+
+    color:white;
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+.time{
+
+    color:#94A3B8;
+
+    font-size:12px;
+
+}
+
+/* ===========================
+        PROBLEM
+=========================== */
+
+.problem-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.problem-title{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+.problem-title:hover{
+
+    color:#60A5FA;
+
+}
+
+.problem-meta{
+
+    display:flex;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+}
+
+.problem-meta span{
+
+    background:#334155;
+
+    color:#CBD5E1;
+
+    padding:4px 10px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+}
+
+/* ===========================
+        LANGUAGE
+=========================== */
+
+.language-pill{
+
+    background:#334155;
+
+    color:#CBD5E1;
+
+    padding:6px 12px;
+
+    border-radius:18px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+/* ===========================
+        STATUS
+=========================== */
+
+.status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.accepted{
+
+    background:rgba(34,197,94,.12);
+
+    color:#22C55E;
+
+}
+
+.status-dot{
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+}
+
+/* ===========================
+        ACTIONS
+=========================== */
+
+.row-actions{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.view-btn,
+.delete-row-btn{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:17px;
+
+}
+
+.view-btn{
+
+    background:#2563EB;
+
+    color:white;
+
+    text-decoration:none;
+
+}
+
+.view-btn:hover{
+
+    background:#3B82F6;
+
+}
+
+.delete-row-btn{
+
+    background:#991B1B;
+
+    color:white;
+
+}
+
+.delete-row-btn:hover{
+
+    background:#DC2626;
+
+}

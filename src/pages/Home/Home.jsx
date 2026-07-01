@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import axios from 'axios';
 import './Home.css';
-
+import Loader from '../../components/Loader/Loader';
 const Home = () => {
   const [upcomingContests, setUpcomingContests] = useState([]);
   const [recentlyCompletedContests, setRecentlyCompletedContests] = useState([]);
@@ -46,8 +46,13 @@ const Home = () => {
   };
 
   if (loading) {
-    return <div className='loading'>Loading...</div>;
-  }
+  return (
+    <Loader
+      title="Loading Homepage..."
+      subtitle="Fetching the latest ..."
+    />
+  );
+}
 
   
 

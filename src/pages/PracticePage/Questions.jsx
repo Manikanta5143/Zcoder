@@ -4,7 +4,7 @@ import TagFilter from '../../components/TagFilter/TagFilter';
 import Pagination from '../../components/Pagination/Pagination';
 import { useQuestionsApi } from '../../hooks/useQuestionsApi';
 import './Questions.css';
-
+import Loader from '../../components/Loader/Loader';
 const Questions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -41,10 +41,10 @@ const Questions = () => {
 
   if (loading) {
   return (
-    <div>
-      <div className="loading-spinner"></div>
-      <div className="loading-text">Loading questions...</div>
-    </div>
+    <Loader
+      title="Loading Questions..."
+      subtitle="Fetching the latest coding problems."
+    />
   );
 }
 
@@ -71,17 +71,42 @@ const Questions = () => {
         <TagFilter tags={allTags} selectedTags={selectedTags} onTagChange={handleTagChange} />
 
         {currentQuestions.map((problem, index) => (
-          <div key={index} className="question-item">
-            <Link to={`/practice/${problem.titleSlug}`}>
-              {problem.title}
-            </Link>
-            <div className="tags">
-              {problem.topicTags.map((tag, tagIndex) => (
-                <span key={tagIndex} className="tag">{tag.name}</span>
-              ))}
-            </div>
-          </div>
-        ))}
+
+<div key={index} className="question-item">
+
+    <div className="question-left">
+
+        <Link
+            className="question-title"
+            to={`/practice/${problem.titleSlug}`}
+        >
+            {problem.title}
+        </Link>
+
+    </div>
+
+    <div className="question-right">
+
+        <div className="tags">
+
+            {problem.topicTags
+                .slice(0,3)
+                .map((tag, tagIndex)=>(
+                    <span
+                        key={tagIndex}
+                        className="tag"
+                    >
+                        {tag.name}
+                    </span>
+                ))}
+
+        </div>
+
+    </div>
+
+</div>
+
+))}
       </div>
 
       <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />

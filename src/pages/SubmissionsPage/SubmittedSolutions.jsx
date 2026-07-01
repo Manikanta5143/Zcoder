@@ -3,7 +3,7 @@ import { useParams,Link} from 'react-router-dom';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useAuthContext } from '../../hooks/useAuthContext';
-import './Submissions.css'
+import './SubmittedSolutions.css';
 const SubmittedSolutions = () => {
 
   const { titleSlug,title } = useParams();
@@ -60,7 +60,10 @@ const SubmittedSolutions = () => {
       </div>
       
       <div className="solution-container">
-      <p className='submissions'>Submitted Solutions</p>
+      <div className="submitted-header">
+  <h2>Submitted Solutions</h2>
+  <p>{filteredSolutions.length} Solution(s)</p>
+</div>
         {filteredSolutions.map(sol => (
           <div key={sol._id} className="solution-item">
             <div className="solution-header">

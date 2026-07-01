@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Contests.css';
-
+import Loader from '../../components/Loader/Loader';
 const Contests = () => {
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -117,46 +117,31 @@ const Contests = () => {
 
   useEffect(() => {
     const fetchContests = async () => {
-      const username = 'shraman1507';
-      const apiKey = '738ba004d8e3e434774b366ec26692422912b96f';
-      const currentDate = new Date().toISOString();
-      
-      // Try with CORS proxy first
-      const corsProxyUrl = `https://cors-anywhere.herokuapp.com/https://clist.by/api/v1/contest/?username=${username}&api_key=${apiKey}&start__gt=${currentDate}&resource__id__in=1,2,102,93&limit=10`;
+  try {
+    const response = await fetch("http://localhost:8008/api/contests");
 
-      try {
-        const response = await fetch(corsProxyUrl, {
-          method: 'GET',
-          headers: {
-            'Origin': 'http://localhost:5173'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        setContests(data.objects || []);
-      } catch (error) {
-        console.log('API failed, using fallback data:', error.message);
-        // If API fails, use fallback data
-        setContests(fallbackContests);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const data = await response.json();
+
+    setContests(data);
+  } catch (error) {
+    console.error(error);
+    setContests(fallbackContests);
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchContests();
   }, []);
 
   if (loading) {
-    return (
-      <div className="contests-container">
-        <div className='loading'>Loading contests...</div>
-      </div>
-    );
-  }
+  return (
+    <Loader
+      title="Loading Contests..."
+      subtitle="Fetching the latest Contests."
+    />
+  );
+}
 
   if (error && contests.length === 0) {
     return (

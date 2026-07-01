@@ -21,6 +21,8 @@ import { useAuthContext } from './hooks/useAuthContext'
 import ChatPage from './pages/ChatPage'
 import UserList from './components/Chat/UserList'
 import GroupList from './components/Chat/GroupList'
+import EmailVerified from './pages/EmailVerified/EmailVerified'
+import VerificationEmailSent from './pages/VerificationEmailSent/VerificationEmailSent'
 
 const mockUsers = ['alice', 'bob', 'charlie', 'dave']
 const mockGroups = [
@@ -67,6 +69,8 @@ const App = () => {
         <Route path='/signup' element={<Signup />}/>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/chat' element={<ChatPage/>}/>
+        <Route path="/email-verified" element={<EmailVerified/>}/>
+        <Route path="/verification-email-sent" element={<VerificationEmailSent/>}/>
       </Routes>
       
       {/* Remove always-visible chat UI. Chat is now only accessible via /chat route. */}

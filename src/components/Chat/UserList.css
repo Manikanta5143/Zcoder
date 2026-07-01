@@ -1,0 +1,35 @@
+.chat-user-list-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:2px 6px;
+    margin-bottom:1px;
+}
+
+.avatar{
+    width:24px;
+    height:24px;
+    font-size:10px;
+}
+
+.user-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.user-info h4{
+    margin:0;
+    font-size:11px;
+    line-height:1;
+}
+
+.user-info p{
+    margin:0;
+    font-size:8px;
+    line-height:1;
+}
+
+.chat-time{
+    font-size:8px;
+}

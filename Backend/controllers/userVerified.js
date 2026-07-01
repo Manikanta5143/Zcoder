@@ -2,7 +2,7 @@ const path = require('path');
 
 const userVerified = (req, res) => {
     try {
-        res.sendFile(path.join(__dirname, '../views/verify.html'));
+        res.redirect("http://localhost:5173/email-verified");
     } catch (error) {
         res.status(500).json({
             status: 'failed',
@@ -11,5 +11,6 @@ const userVerified = (req, res) => {
         });
     }
 };
-
 module.exports = { userVerified };
+
+

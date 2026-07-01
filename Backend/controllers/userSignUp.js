@@ -41,11 +41,16 @@ const userSignUp = async (req, res) => {
       });
     } else {
       // Check if user already exists
-      const existingUser = await user.findOne({ email });
+      const existingUser = await user.findOne({
+    $or: [
+        { username },
+        { email }
+    ]
+});
       if (existingUser) {
         return res.json({
           status: "Failed",
-          message: "User with the provided email already exists"
+          message: "Username or Email already exists"
         });
       } else {
         const saltRounds = 10;

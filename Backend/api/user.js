@@ -12,7 +12,8 @@ const UserVerification = require('../model/userVerification');
 const { userEmailVerification } = require('../controllers/userEmailVerification');
 const userSignIn  = require('../controllers/userLogin');
 const userSignUp = require('../controllers/userSignUp');
-const { sendVerificationEmail } = require('../controllers/sendVerificationEmail');
+const sendVerificationEmail = require('../controllers/sendVerificationEmail');
+const { resendVerificationEmail } = require('../controllers/resendVerificationEmail');
 
 // path for static verified page, html page
 const path = require('path');
@@ -138,6 +139,20 @@ router.get('/test-user/:username', async (req, res) => {
     res.status(500).json({
       status: 'failed',
       message: 'An error occurred while testing user',
+      error: error.message,
+    });
+  }
+});
+// Resend verification email
+router.post('/resend-verification', async (req, res) => {
+  try {
+    await resendVerificationEmail(req, res);
+  } catch (error) {
+    console.error("Resend Verification Route Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while resending the verification email.",
       error: error.message,
     });
   }

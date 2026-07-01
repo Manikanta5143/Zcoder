@@ -5,6 +5,8 @@ import Pagination from '../../components/Pagination/Pagination';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 import { Link, useNavigate } from 'react-router-dom';
 import './Submissions.css'
+import SubmissionTable from "./components/SubmissionTable";
+import Loader from '../../components/Loader/Loader';
 
 const Submissions = () => {
   const navigate = useNavigate()
@@ -19,6 +21,7 @@ const Submissions = () => {
   const { user, isAuthenticated } = useAuthContext();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [redirectLoading, setRedirectLoading] = useState(false);
 
 
 
@@ -29,9 +32,10 @@ const Submissions = () => {
     } else {
       if (!message) {
         setMessage('You need to be logged in to view this page.');
+        setRedirectLoading(true);
         setTimeout(() => {
           navigate('/login');
-        }, 3000);
+        }, 1500);
       }
     }
   }, [user, isAuthenticated]);
@@ -96,7 +100,7 @@ const Submissions = () => {
         setSubmissions(prevSubmissions => 
           prevSubmissions.filter(submission => submission._id !== itemToDelete.id)
         );
-        alert('Submission deleted successfully');
+        toast.success("Submission deleted successfully");
       } else {
         alert('Failed to delete submission');
       }
@@ -113,7 +117,15 @@ const Submissions = () => {
     setShowDeleteDialog(false);
     setItemToDelete(null);
   };
-
+  if (redirectLoading) {
+  return (
+    <Loader
+      title="Login to view this page"
+      subtitle="Please wait while we take you to the login page."
+    />
+  );
+}
+ 
   if(message){
     return <div className='loading'>Login to view this page</div>;
   }
@@ -130,36 +142,59 @@ const Submissions = () => {
 
   return (
 
+
     <>
+    
+
       <div className="questions-list">
+        <div className="submission-page-header">
+  <h1>My Submissions</h1>
+  <p>Track every solution you've solved and submitted.</p>
+</div>
+        <div className="submission-dashboard">
+
+  <div className="dashboard-card">
+    <span>Total Submissions</span>
+    <h2>{submissions.length}</h2>
+  </div>
+
+  <div className="dashboard-card">
+    <span>Topics Covered</span>
+    <h2>{allTags.length}</h2>
+  </div>
+
+  <div className="dashboard-card">
+    <span>Visible Results</span>
+    <h2>{filteredQuestions.length}</h2>
+  </div>
+
+</div>
+        
         <TagFilter tags={allTags} selectedTags={selectedTags} onTagChange={handleTagChange} />
 
-        {currentQuestions.length === 0 && (
-          <div style={{ textAlign: 'center', color: '#888', fontSize: '1.3rem', fontWeight: 600, margin: '32px 0' }}>
-            No Submissions
-          </div>
-        )}
-        {currentQuestions.map((question) => (
-          <div key={question._id} className="submission-bubble">
-            <Link to={`/submissions/${question.titleSlug}`} className="submission-bubble-title">
-              {question.title}
-              <p className='submission-bubble-time'>
-                Submitted at: {isNaN(new Date(question.createdAt)) ? 'Invalid Date' : new Date(question.createdAt).toLocaleString()}
-              </p>
-            </Link>
-            <div className="submission-bubble-tags">
-              {question.topicTags.map((tag, tagIndex) => (
-                <span key={tagIndex} className="tag">{tag.name}</span>
-              ))}
-            </div>
-            <button 
-              className="delete-btn" 
-              onClick={() => handleDeleteSubmission(question._id)}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+       {currentQuestions.length === 0 && (
+  <div className="empty-submissions">
+
+    <div className="empty-submissions-icon">
+  💻
+</div>
+
+    <h2>No Submissions Yet</h2>
+
+    <p>
+      Start solving coding problems to build your submission history.
+    </p>
+
+    <Link to="/practice" className="start-solving-btn">
+      🚀 Start Solving
+    </Link>
+
+  </div>
+)}
+<SubmissionTable
+    submissions={currentQuestions}
+    onDelete={handleDeleteSubmission}
+/>
       </div>
       <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
       

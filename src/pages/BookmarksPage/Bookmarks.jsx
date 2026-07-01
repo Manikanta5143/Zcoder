@@ -5,6 +5,7 @@ import TagFilter from '../../components/TagFilter/TagFilter';
 import Pagination from '../../components/Pagination/Pagination';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 import './Bookmarks.css';
+import Loader from '../../components/Loader/Loader';
 
 const Bookmarks = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ const Bookmarks = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [redirectLoading, setRedirectLoading] = useState(false);
   const questionsPerPage = 40;
   const { user, isAuthenticated } = useAuthContext();
   // const [alertShown, setAlertShown] = useState(false);
@@ -29,12 +31,15 @@ const Bookmarks = () => {
     } else {
       if (!message) {
         setMessage('You need to be logged in to view this page.');
+        setRedirectLoading(true);
+        
         setTimeout(() => {
           navigate('/login');
-        }, 3000);
+        }, 1500);
       }
     }
   }, [user, isAuthenticated]);
+  
 
   const fetchBookmarkedQuestions = async (userId) => {
     try {
@@ -112,7 +117,14 @@ const Bookmarks = () => {
     setShowDeleteDialog(false);
     setItemToDelete(null);
   };
-
+  if (redirectLoading) {
+  return (
+    <Loader
+      title="Login to view this page"
+      subtitle="Please wait while we take you to the login page."
+    />
+  );
+}
   if(message){
     return <div className='loading'>Login to view this page</div>;
   }
@@ -125,6 +137,14 @@ const Bookmarks = () => {
   }
 
   const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+  if (redirectLoading) {
+  return (
+    <Loader
+      title="Redirecting..."
+      subtitle="Please wait while we take you to the login page."
+    />
+  );
+}
 
   return (
     <>

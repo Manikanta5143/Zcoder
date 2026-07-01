@@ -7,6 +7,7 @@ import { IoIosArrowDown,IoIosArrowUp, IoMdBookmark } from "react-icons/io";
 import {useAuthContext} from '../../hooks/useAuthContext';
 import { useProblemStatementApi } from '../../hooks/useProblemStatementApi';
 import { useQuestionsApi } from '../../hooks/useQuestionsApi';
+import Loader from '../../components/Loader/Loader';
 
 const ProblemStatement = () => {
   const { titleSlug } = useParams();
@@ -258,13 +259,13 @@ const ProblemStatement = () => {
   }
 
   if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}></div>
-        <div className={styles.loadingText}>Loading problem statement...</div>
-      </div>
-    );
-  }
+  return (
+    <Loader
+      title="Loading Problem Statements..."
+      subtitle="Fetching the latest problem statements."
+    />
+  );
+}
 
   if (error) {
     return (

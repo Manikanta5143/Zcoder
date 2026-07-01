@@ -1,38 +1,60 @@
-// Pagination.js
-import React from 'react';
+import React from "react";
 
-const Pagination = ({ currentPage, totalPages, paginate }) => {
-  // Determine the range of pagination buttons to display
-  let startPage = 1;
-  let endPage = totalPages;
-  if (totalPages > 4) {
-    if (currentPage <= 2) {
-      endPage = 4;
-    } else if (currentPage >= totalPages - 1) {
-      startPage = totalPages - 3;
-    } else {
-      startPage = currentPage - 1;
-      endPage = currentPage + 1;
-    }
-  }
+const Pagination = ({
+  currentPage,
+  totalPages,
+  paginate
+}) => {
+
+  if(totalPages<=1) return null;
 
   return (
+
     <div className="pagination">
-      <button onClick={() => paginate(1)}>First</button>
-      {startPage > 1 && <span>...</span>}
-      {Array.from({ length: endPage - startPage + 1 }).map((_, index) => (
+
+      <button
+        disabled={currentPage===1}
+        onClick={() =>
+          paginate(currentPage-1)
+        }
+      >
+        ← Previous
+      </button>
+
+      {Array.from(
+        {length:totalPages},
+        (_,i)=>i+1
+      ).map(page=>(
+
         <button
-          key={startPage + index}
-          onClick={() => paginate(startPage + index)}
-          className={currentPage === startPage + index ? 'active' : ''}
+          key={page}
+          className={
+            currentPage===page
+              ?"active"
+              :""
+          }
+          onClick={()=>paginate(page)}
         >
-          {startPage + index}
+
+          {page}
+
         </button>
+
       ))}
-      {endPage < totalPages && <span>...</span>}
-      <button onClick={() => paginate(totalPages)}>Last</button>
+
+      <button
+        disabled={currentPage===totalPages}
+        onClick={() =>
+          paginate(currentPage+1)
+        }
+      >
+        Next →
+      </button>
+
     </div>
+
   );
+
 };
 
 export default Pagination;

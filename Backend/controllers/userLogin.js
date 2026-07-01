@@ -44,12 +44,15 @@ const userSignIn = async (req, res) => {
 
         // Check if user is verified
         if (!userData.verified) {
-            console.log('User not verified:', userData.username);
-            return res.json({
-                status: "Failed",
-                message: "User is not verified. Please sign up or resend verification email."
-            });
-        }
+    console.log("User not verified:", userData.username);
+
+    return res.status(403).json({
+        success: false,
+        verified: false,
+        email: userData.email,
+        message: "Your email is not verified. Please verify your email first."
+    });
+}
 
         // Compare passwords
         const isMatch = await bcrypt.compare(password, userData.password);

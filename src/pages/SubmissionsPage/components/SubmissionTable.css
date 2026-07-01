@@ -1,0 +1,79 @@
+/* ===========================
+        TABLE
+=========================== */
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    border-radius:18px;
+}
+
+.submission-table{
+    width:100%;
+    min-width:950px;
+    background:#1E293B;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+/* ===========================
+        TABLE HEADER
+=========================== */
+
+.submission-table-header{
+
+    display:grid;
+
+    grid-template-columns:
+        130px
+        2.2fr
+        130px
+        150px
+        120px;
+
+    align-items:center;
+
+    background:#111827;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+
+    padding:18px 24px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:5;
+
+}
+
+/* Small header hover effect */
+
+.submission-table-header div{
+
+    user-select:none;
+
+}
+.no-submissions{
+
+    padding:40px;
+
+    text-align:center;
+
+    color:#94A3B8;
+
+    font-size:16px;
+
+}

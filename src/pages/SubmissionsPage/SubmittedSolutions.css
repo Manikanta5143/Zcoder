@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* ==========================================
+                GLOBAL
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Montserrat',sans-serif;
+}
+
+/* ==========================================
+            PAGE LAYOUT
+========================================== */
+
+.problemStatementContainer{
+
+    display:grid;
+
+    grid-template-columns:1.2fr .9fr;
+
+    gap:28px;
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:30px;
+
+    background:#0F172A;
+
+}
+
+/* ==========================================
+        PROBLEM PANEL
+========================================== */
+
+.problemStatement{
+
+    background:#1E293B;
+
+    border:1px solid rgba(59,130,246,.18);
+
+    border-radius:20px;
+
+    padding:28px;
+
+    overflow-y:auto;
+
+    max-height:calc(100vh - 60px);
+
+    position:sticky;
+
+    top:20px;
+
+}
+
+.problemStatement::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.problemStatement::-webkit-scrollbar-thumb{
+
+    background:#334155;
+
+    border-radius:20px;
+
+}
+
+.title{
+
+    display:inline-block;
+
+    color:#ffffff;
+
+    text-decoration:none;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-bottom:22px;
+
+    transition:.3s;
+
+}
+
+.title:hover{
+
+    color:#60A5FA;
+
+}
+
+.questionStatement{
+
+    color:#CBD5E1;
+
+    line-height:1.8;
+
+    font-size:15px;
+
+}
+
+.questionStatement p{
+
+    color:#CBD5E1;
+
+    margin-bottom:16px;
+
+}
+
+.questionStatement pre{
+
+    background:#111827 !important;
+
+    border-radius:12px;
+
+    padding:16px;
+
+    overflow-x:auto;
+
+}
+
+.questionStatement code{
+
+    color:#E2E8F0;
+
+}
+
+/* ==========================================
+        RIGHT PANEL
+========================================== */
+
+.solution-container{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+    max-height:calc(100vh - 60px);
+
+    overflow-y:auto;
+
+    padding-right:6px;
+
+}
+
+.solution-container::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.solution-container::-webkit-scrollbar-thumb{
+
+    background:#334155;
+
+    border-radius:20px;
+
+}
+
+/* ==========================================
+        HEADING
+========================================== */
+
+.submissions{
+
+    color:white;
+
+    font-size:30px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+}
+
+/* ==========================================
+        SOLUTION CARD
+========================================== */
+
+.solution-item{
+
+    background:#1E293B;
+
+    border:1px solid rgba(59,130,246,.15);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.3s;
+
+}
+
+.solution-item:hover{
+
+    transform:translateY(-4px);
+
+    border-color:#3B82F6;
+
+    box-shadow:0 18px 40px rgba(37,99,235,.15);
+
+}
+
+/* ==========================================
+        HEADER
+========================================== */
+
+.solution-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 22px;
+
+    background:#111827;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+}
+
+.solution-header p{
+
+    color:#CBD5E1;
+
+    font-size:14px;
+
+}
+
+.solution-header p:first-child{
+
+    color:#34D399;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+        CODE
+========================================== */
+
+.solution{
+
+    max-height:420px;
+
+    overflow:auto;
+
+}
+
+.solution pre{
+
+    margin:0 !important;
+
+    border-radius:0 !important;
+
+}
+.submitted-header{
+    margin-bottom:20px;
+}
+
+.submitted-header h2{
+    color:white;
+    font-size:30px;
+    margin-bottom:6px;
+}
+
+.submitted-header p{
+    color:#94A3B8;
+}
+
+/* ==========================================
+        RESPONSIVE
+========================================== */
+
+@media(max-width:1000px){
+
+    .problemStatementContainer{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .problemStatement{
+
+        position:relative;
+
+        top:0;
+
+        max-height:none;
+
+    }
+
+    .solution-container{
+
+        max-height:none;
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    .problemStatementContainer{
+
+        padding:18px;
+
+    }
+
+    .title{
+
+        font-size:28px;
+
+    }
+
+    .submissions{
+
+        font-size:24px;
+
+    }
+
+    .solution-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:8px;
+
+    }
+
+}

@@ -1,206 +1,876 @@
-/* :root{
-  --bg-color:rgb(17, 0, 255);
-  --bc-color:rgb(95, 171, 247);
-}
+/* ===========================
+   ZCODER NAVBAR
+=========================== */
 
-.nav-bar{
-  padding: 20px;
-  display: flex;
-  justify-content:space-between;
-  align-items: center;
-  font-size: 20px;
-  background-color: rgb(8, 5, 5);
-  position: sticky;
-  top: 0%;
-  border-bottom: 1px solid rgb(45, 90, 139);
-}
-.hamburger-menu{
-  position: absolute;
-  top:35px;
-  right: 16px;
-}
+:root {
 
-.nav-bar ul{
-  padding-right: 50px;
-  display: flex;
-  justify-content: space-around;
-  gap:30px;    
-}
-.nav-bar h1{
-  color: var(--bg-color);
-  margin-left: 50px;
-}
-.nav-bar a{
-  font-size: 20px;
-}
-.nav-bar .active{
-  color: var(--bg-color);
-  padding-bottom: 2px;
-  border-bottom: 2px solid var(--bg-color);
-}
+    --primary: #2563EB;
+    --primary-light: #3B82F6;
 
-.nav-bar a:not(.active):hover{
+    --bg: #0B1120;
+    --bg-light: rgba(15,23,42,.88);
 
-  color: var(--bg-color);
-}
- 
-@media (max-width:1050px){
-  .nav-bar{
-    padding: 20px;
-  }
-}
-@media (min-width:750px){
-  .hamburger-menu{
-    display: none;
-  }
-  
-}
+    --card: #111827;
 
-@media (max-width:750px){
-  .nav-bar{
-    flex-direction: column;
-    align-items: center;
-  }
-  .nav-bar h1{
-    margin-left: 0;
-  }
-  .nav-bar ul{
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 10px;
-  }
-  .nav-bar ul.open{
-    padding: 0;
-    display: flex;
-  }
-  .nav-bar ul li{
-    width: 100%;
-    text-align: center;
-  }
-  .nav-bar .active{
-    border: none;
-    color: var(--bc-color);
-  }
-  .nav-bar a:not(.active):hover{
-    
-    color:var(--bc-color);
-  }
-  
-} */
+    --text: #F8FAFC;
+    --text-secondary: #CBD5E1;
 
+    --border: #1E293B;
 
-:root{
-  /* --bg-color:rgb(17, 0, 255);
-  --bc-color:rgb(95, 171, 247);
-  --lb-color:rgb(45, 90, 139); */
-  --navbar-background : black;
-  --navbar-bottom: rgb(45, 90, 139);
-  --navbar-text:rgb(17, 0, 255);
-  --navbar-span:white;
-  --navbar-active:rgb(17, 0, 255);
-  --ul-color:white;
-}
+    --danger: #EF4444;
 
-[data-theme="light"]{
-  --navbar-background:rgb(95, 171, 247);
-  --navbar-bottom:black;
-  --navbar-text:white;
-  --navbar-span:black;
-  --ul-color:black;
-  --navbar-active:white;
-}
-span {
-  color: var(--navbar-span);
-}
-.nav-bar{
-  background-color: var(--navbar-background);
-  padding: 20px;
-  display: flex;
-  justify-content:space-between;
-  align-items: center;
-  font-size: 20px;
-  position: sticky;
-  top: 0%;
-  border-bottom: 1px solid var(--navbar-bottom);
-  z-index: 1000;
-  
 }
 
 
-.hamburger-menu{
-  position: absolute;
-  top:35px;
-  right: 16px;
+/* ===========================
+   NAVBAR
+=========================== */
+
+.navbar{
+
+    position: sticky;
+    top:0;
+
+    width:100%;
+    height:72px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 45px;
+
+    background:rgba(11,17,32,.88);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--border);
+
+    z-index:999;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.25);
+
 }
 
-.nav-bar ul{
-  
-  padding-right: 50px;
-  display: flex;
-  justify-content: space-around;
-  gap:30px;    
-}
-.nav-bar h1{
-  color: var(--navbar-text);
-  margin-left: 50px;
-}
-.nav-bar a{
-  color: var(--ul-color);
-  font-size: 20px;
-}
-.nav-bar .active{
-  color: var(--navbar-active);
-  padding-bottom: 2px;
-  border-bottom: 2px solid var(--navbar-active);
+
+/* ===========================
+   LOGO
+=========================== */
+
+.logo{
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    text-decoration:none;
+
 }
 
-.nav-bar a:not(.active):hover{
+.logo-image{
 
-  color: var(--navbar-active);
-}
- 
-@media (max-width:1050px){
-  .nav-bar{
-    padding: 20px;
-  }
-}
-@media (min-width:750px){
-  .hamburger-menu{
-    display: none;
-  }
-  
+    width:48px;
+    height:48px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
 }
 
-@media (max-width:750px){
-  .nav-bar{
-    flex-direction: column;
-    align-items: center;
-  }
-  .nav-bar h1{
-    margin-left: 0;
-  }
-  .nav-bar ul{
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 10px;
-  }
-  .nav-bar ul.open{
-    padding: 0;
-    display: flex;
-  }
-  .nav-bar ul li{
-    width: 100%;
-    text-align: center;
-  }
-  .nav-bar .active{
-    border: none;
-    color: var(--navbar-active);
-  }
-  .nav-bar a:not(.active):hover{
-    
-    color:var(--navbar-active);
-  }
-  
+.logo-text{
+
+    font-size:2rem;
+
+    font-weight:800;
+
+    color:white;
+
+    letter-spacing:-1px;
+
+}
+
+
+/* ===========================
+   CENTER NAVIGATION
+=========================== */
+
+.nav-center{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:36px;
+
+}
+
+.nav-center a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:var(--text-secondary);
+
+    text-decoration:none;
+
+    font-size:17px;
+
+    font-weight:500;
+
+    position:relative;
+
+    transition:.3s;
+
+}
+
+
+.nav-center a:nth-child(1) svg{
+    color:#F59E0B;   /* Trophy */
+}
+
+.nav-center a:nth-child(2) svg{
+    color:#3B82F6;   /* Practice */
+}
+
+.nav-center a:nth-child(3) svg{
+    color:#8B5CF6;   /* Submissions */
+}
+
+.nav-center a:nth-child(4) svg{
+    color:#FBBF24;   /* Bookmarks */
+}
+
+.nav-center a:nth-child(5) svg{
+    color:#22C55E;   /* Chat */
+}
+
+.nav-center a:hover{
+
+    color:white;
+
+}
+
+
+/* ===========================
+   UNDERLINE ANIMATION
+=========================== */
+
+.nav-center a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-12px;
+
+    width:0;
+
+    height:3px;
+
+    border-radius:50px;
+
+    background:var(--primary);
+
+    transition:.3s;
+
+}
+
+
+.nav-center a:hover::after{
+
+    width:100%;
+
+}
+
+
+.nav-center .active{
+
+    color:white;
+
+}
+
+
+.nav-center .active::after{
+
+    width:100%;
+
+}
+
+
+/* ===========================
+   RIGHT SIDE
+=========================== */
+
+.nav-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+
+/* ===========================
+   ICON BUTTONS
+=========================== */
+
+.icon-button{
+
+    width:44px;
+
+    height:44px;
+
+    border:none;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    background:#111827;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    transition:.3s;
+
+}
+
+
+.icon-button svg{
+
+    font-size:18px;
+
+}
+
+
+.icon-button:hover{
+
+    background:var(--primary);
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ===========================
+   NOTIFICATION
+=========================== */
+
+.notification-btn{
+
+    position:relative;
+
+}
+
+
+.notification-dot{
+
+    position:absolute;
+
+    top:-4px;
+
+    right:-2px;
+
+    width:20px;
+
+    height:20px;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+/* ===========================
+   PROFILE
+=========================== */
+
+.profile{
+
+    position:relative;
+
+}
+
+
+.profile-button{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:8px 14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#111827;
+
+    cursor:pointer;
+
+    color:white;
+
+    transition:.3s;
+
+}
+
+
+.profile-button:hover{
+
+    background:#1E293B;
+
+}
+
+
+/* ===========================
+   AVATAR
+=========================== */
+
+.avatar{
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+    135deg,
+    #3B82F6,
+    #2563EB
+    );
+
+    color:rgb(255, 255, 255);
+
+    font-weight:bold;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+/* ===========================
+   LOGIN BUTTON
+=========================== */
+
+.login-btn{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+.login-btn:hover{
+
+    color:var(--primary);
+
+}
+
+
+/* ===========================
+   SIGNUP BUTTON
+=========================== */
+
+.signup-btn{
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    background:var(--primary);
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+.signup-btn:hover{
+
+    background:var(--primary-light);
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ===========================
+   HAMBURGER
+=========================== */
+
+.menu-btn{
+
+    display:none;
+
+}
+/* ==========================================
+   PROFILE DROPDOWN
+========================================== */
+
+.profile-menu{
+    position:absolute;
+    top:65px;
+    right:0;
+
+    width:220px;
+
+    background:#111827;
+
+    border:1px solid #1E293B;
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.45);
+
+    animation:dropdown .25s ease;
+
+    z-index:999;
+}
+
+@keyframes dropdown{
+
+    from{
+
+        opacity:0;
+        transform:translateY(-10px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+.profile-menu a,
+.profile-menu button{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:14px 18px;
+
+    color:#E2E8F0;
+
+    text-decoration:none;
+
+    border:none;
+
+    background:transparent;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.profile-menu a:hover,
+.profile-menu button:hover{
+
+    background:#1E293B;
+
+    color:white;
+
+}
+
+.profile-menu svg{
+
+    color:#3B82F6;
+
+}
+
+
+
+/* ==========================================
+   MOBILE MENU
+========================================== */
+
+.mobile-menu{
+
+    position:fixed;
+
+    top:72px;
+
+    right:-320px;
+
+    width:280px;
+
+    height:calc(100vh - 72px);
+
+    background:#0F172A;
+
+    border-left:1px solid #1E293B;
+
+    transition:.35s ease;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:30px 20px;
+
+    gap:10px;
+
+    z-index:998;
+
+}
+
+.mobile-menu.show{
+
+    right:0;
+
+}
+
+.mobile-menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:14px 16px;
+
+    color:#CBD5E1;
+
+    text-decoration:none;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+.mobile-menu a:hover{
+
+    background:#1E293B;
+
+    color:white;
+
+}
+
+.mobile-menu .active{
+
+    background:#2563EB;
+
+    color:white;
+
+}
+
+
+
+/* ==========================================
+   MOBILE LOGOUT
+========================================== */
+
+.logout-mobile{
+
+    margin-top:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:14px 16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    background:#DC2626;
+
+    color:white;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.logout-mobile:hover{
+
+    background:#B91C1C;
+
+}
+
+
+
+/* ==========================================
+   MOBILE LOGIN BUTTONS
+========================================== */
+
+.auth-buttons{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+
+/* ==========================================
+   HAMBURGER BUTTON
+========================================== */
+
+.menu-btn{
+
+    display:none;
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#111827;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.menu-btn svg{
+
+    font-size:22px;
+
+}
+
+.menu-btn:hover{
+
+    background:#2563EB;
+
+}
+
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:1100px){
+
+    .nav-center{
+
+        gap:22px;
+
+    }
+
+}
+
+
+
+@media(max-width:950px){
+
+    .nav-center{
+
+        display:none;
+
+    }
+
+    .menu-btn{
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:center;
+
+    }
+
+}
+
+
+
+@media(max-width:768px){
+
+    .navbar{
+
+        padding:0 20px;
+
+    }
+
+    .logo-text{
+
+        font-size:1.6rem;
+
+    }
+
+    .profile{
+
+        display:none;
+
+    }
+
+    .notification-btn{
+
+        display:none;
+
+    }
+
+    .auth-buttons{
+
+        display:none;
+
+    }
+
+}
+
+
+
+@media(max-width:500px){
+
+    .logo-image{
+
+        width:42px;
+        height:42px;
+
+    }
+
+    .logo-text{
+
+        font-size:1.4rem;
+
+    }
+
+    .mobile-menu{
+
+        width:100%;
+
+        right:-100%;
+
+    }
+
+    .mobile-menu.show{
+
+        right:0;
+
+    }
+
+}
+
+
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+.mobile-menu::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+.mobile-menu::-webkit-scrollbar-thumb{
+
+    background:#2563EB;
+
+    border-radius:20px;
+
+}
+
+
+
+/* ==========================================
+   SMOOTH ANIMATIONS
+========================================== */
+
+.logo,
+.nav-center a,
+.profile-button,
+.icon-button,
+.login-btn,
+.signup-btn,
+.mobile-menu a{
+
+    transition:all .3s ease;
+
+}
+
+
+
+/* ==========================================
+   OPTIONAL GLOW
+========================================== */
+
+.signup-btn:hover{
+
+    box-shadow:
+        0 0 20px rgba(37,99,235,.45);
+
+}
+
+.logo-image:hover{
+
+    transform:rotate(-5deg) scale(1.05);
+
 }

@@ -1,0 +1,53 @@
+.submission-page-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+}
+
+.submission-page-header h1{
+
+    color:white;
+
+    font-size:38px;
+
+    margin-bottom:8px;
+
+}
+
+.submission-page-header p{
+
+    color:#94A3B8;
+
+    font-size:16px;
+
+}
+
+.filter-btn{
+
+    background:#1E293B;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.filter-btn:hover{
+
+    background:#2563EB;
+
+}

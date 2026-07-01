@@ -1,22 +1,33 @@
-// TagFilter.js
-import React from 'react';
+import React from "react";
 
 const TagFilter = ({ tags, selectedTags, onTagChange }) => {
+
   return (
-    <div className="tag-filters">
+
+    <div className="tag-filter-wrapper">
+
       {tags.map(tag => (
-        <label key={tag}>
-          <input
-            type="checkbox"
-            value={tag}
-            checked={selectedTags.includes(tag)}
-            onChange={() => onTagChange(tag)}
-          />
-          <span>{tag}</span>
-        </label>
+
+        <button
+          key={tag}
+          onClick={() => onTagChange(tag)}
+          className={`tag-filter-btn ${
+            selectedTags.includes(tag)
+              ? "active-tag"
+              : ""
+          }`}
+        >
+
+          {tag}
+
+        </button>
+
       ))}
+
     </div>
+
   );
+
 };
 
 export default TagFilter;

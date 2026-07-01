@@ -93,7 +93,9 @@ form .signupButton{
 } */
 
 
-
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.5); /* 50% opacity */
+}
 :root{
   --signupContent-background:black;
   --signupContent-text:white;
@@ -165,9 +167,7 @@ form .signupButton{
   border-color:rgb(22, 20, 20);
   box-shadow: 0 0 10px var(--input-focus);
 }
-.inputBox input::placeholder{
-  color: var(--wt--color);
-}
+
 .inputBox .icon{
   position: absolute;
   right: 20px;

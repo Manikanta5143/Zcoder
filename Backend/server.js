@@ -8,7 +8,7 @@ const userRouter = require('./api/user')
 const postRouter = require('./routes/solutionRoute')
 const bookmarkRouter = require('./routes/bookmarksRoute');
 const commentRouter = require('./routes/commentsRoute')
-// for accepting post form data
+const contestRoutes = require("./routes/contest.routes");// for accepting post form data
 const bodyParser = require('express').json;
 app.use(bodyParser());
 app.use(express.urlencoded({extended:true}));
@@ -96,6 +96,7 @@ app.get('/user/:id', async (req, res) => {
       res.status(500).json({ message: 'Error updating friends', error });
     }
   });
+  app.use("/api/contests", contestRoutes);
   
   app.get('/search', async (req, res) => {
     try {
