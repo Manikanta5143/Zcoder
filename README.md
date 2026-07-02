@@ -380,6 +380,23 @@ The backend application requires the following parameters in `Backend/.env`:
 
 ---
 
+## 👨‍💻 My Contributions
+
+Although ZCoder was initially developed as a collaborative academic project, I was responsible for the majority of the implementation and ongoing development, including:
+
+- Designing and developing the complete React frontend.
+- Building REST APIs using Node.js and Express.js.
+- MongoDB database schema design and integration.
+- JWT authentication and email verification using Nodemailer.
+- Judge0 API integration for real-time code execution.
+- Socket.IO based one-to-one and group chat.
+- User analytics dashboard, activity heatmap, and charts.
+- Bookmarks, submissions, notifications, and profile modules.
+- UI/UX improvements, responsive layouts, and dark/light theme.
+- Project documentation and repository maintenance.
+
+ --- 
+
 ## 🤝 Contributing
 
 We welcome contributions to ZCoder! To contribute:
@@ -404,9 +421,7 @@ This project is licensed under a custom viewing and modification license. Under 
 - **Non-Commercial**: Commercial use, resale, or incorporation of this project into commercial products is strictly prohibited without prior written permission from the author.
 - **Attribution**: Any reference to this project should credit the original author.
 
-For permission requests, please contact:
-
-**Email:** manikantamani90140@gmail.com
+For permission requests, please contact the project author through GitHub.
 
 ---
 
