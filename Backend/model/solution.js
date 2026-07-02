@@ -39,10 +39,43 @@ const solutionSchema = new mongoose.Schema({
       }
     }
   ],
+  verdict: {
+    type: String,
+    default: "Accepted"
+  },
+  runtime: {
+    type: String,
+    default: "0 ms"
+  },
+  memory: {
+    type: String,
+    default: "0 KB"
+  },
+  difficulty: {
+    type: String,
+    enum: ['Easy', 'Medium', 'Hard'],
+    default: "Medium"
+  },
+  passedCount: {
+    type: Number,
+    default: 0
+  },
+  totalCount: {
+    type: Number,
+    default: 0
+  },
+  results: {
+    type: [mongoose.Schema.Types.Mixed],
+    default: []
+  }
 },{
   timestamps:true
 });
 
+// Indexes for rapid profile, submissions history, and leaderboard calculations
+solutionSchema.index({ userId: 1, createdAt: -1 });
+solutionSchema.index({ titleSlug: 1 });
+solutionSchema.index({ userId: 1, titleSlug: 1, verdict: 1 });
 
 const Solution = mongoose.model('Solution', solutionSchema);
 

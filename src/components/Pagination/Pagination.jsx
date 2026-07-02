@@ -6,34 +6,34 @@ const Pagination = ({
   paginate
 }) => {
 
-  if(totalPages<=1) return null;
+  if (totalPages <= 1) return null;
 
   return (
 
     <div className="pagination">
 
       <button
-        disabled={currentPage===1}
+        disabled={currentPage === 1}
         onClick={() =>
-          paginate(currentPage-1)
+          paginate(currentPage - 1)
         }
       >
         ← Previous
       </button>
 
       {Array.from(
-        {length:totalPages},
-        (_,i)=>i+1
-      ).map(page=>(
+        { length: totalPages },
+        (_, i) => i + 1
+      ).map(page => (
 
         <button
           key={page}
           className={
-            currentPage===page
-              ?"active"
-              :""
+            currentPage === page
+              ? "active"
+              : ""
           }
-          onClick={()=>paginate(page)}
+          onClick={() => paginate(page)}
         >
 
           {page}
@@ -43,9 +43,9 @@ const Pagination = ({
       ))}
 
       <button
-        disabled={currentPage===totalPages}
+        disabled={currentPage === totalPages}
         onClick={() =>
-          paginate(currentPage+1)
+          paginate(currentPage + 1)
         }
       >
         Next →

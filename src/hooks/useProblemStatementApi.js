@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 /**
  * Custom hook for managing problem statement API calls
+ * Fetches from internal questions API and maps properties for compatibility
  * @param {string} titleSlug - The problem's title slug
  * @returns {Object} - State for problem statement API
  */
@@ -18,14 +19,24 @@ export const useProblemStatementApi = (titleSlug) => {
 
     const fetchProblemStatement = async () => {
       try {
-        const response = await fetch(`https://alfa-leetcode-api.onrender.com/select?titleSlug=${titleSlug}`);
+        const response = await fetch(`/api/questions/${titleSlug}`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
-        setProblem(data);
+        
+        // Map backend schema to the expected frontend schema
+        const mappedProblem = {
+          ...data,
+          questionTitle: data.title,
+          question: data.description,
+          hints: Array.isArray(data.hints) ? data.hints : [],
+          topicTags: data.topicTags || []
+        };
+        
+        setProblem(mappedProblem);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -41,4 +52,4 @@ export const useProblemStatementApi = (titleSlug) => {
     loading,
     error
   };
-}; 
+};

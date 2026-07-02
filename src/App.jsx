@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { BrowserRouter,Routes,Route } from 'react-router-dom'
 import useLocalStorage from 'use-local-storage'
-import Profile from './pages/ProfilePage/Profile'
 import Home from './pages/Home/Home'
 import Login from './pages/LoginPage/Login'
 import Nav from './components/Nav/Nav'
@@ -10,19 +9,25 @@ import Footer from './components/Footer/Footer'
 import Toggle from './components/Toggle/Toggle'
 // import RequireAuth from './components/RequireAuth'
 import Contests from './pages/ContestPage/Contests'
-import Questions from './pages/PracticePage/Questions'
-import ProblemStatement from './pages/PracticePage/ProblemStatement'
-import Bookmarks from './pages/BookmarksPage/Bookmarks'
 import BookmarkedSolutions from './pages/BookmarksPage/BookmarkedSolutions'
-import Submissions from './pages/SubmissionsPage/Submissions'
 import SubmittedSolutions from './pages/SubmissionsPage/SubmittedSolutions'
+
+// Lazy-loaded pages for optimized bundle size and rendering speed
+const Profile = React.lazy(() => import('./pages/ProfilePage/Profile'));
+const Questions = React.lazy(() => import('./pages/PracticePage/Questions'));
+const ProblemStatement = React.lazy(() => import('./pages/PracticePage/ProblemStatement'));
+const Bookmarks = React.lazy(() => import('./pages/BookmarksPage/Bookmarks'));
+const Submissions = React.lazy(() => import('./pages/SubmissionsPage/Submissions'));
+const ChatPage = React.lazy(() => import('./pages/ChatPage'));
+const EmailVerified = React.lazy(() => import('./pages/EmailVerified/EmailVerified'));
+const VerificationEmailSent = React.lazy(() => import('./pages/VerificationEmailSent/VerificationEmailSent'));
+const SubmissionDetails = React.lazy(() => import('./pages/SubmissionsPage/SubmissionDetails'));
+const Leaderboard = React.lazy(() => import('./pages/LeaderboardPage/Leaderboard'));
+
 import './App.css'
 import { useAuthContext } from './hooks/useAuthContext'
-import ChatPage from './pages/ChatPage'
 import UserList from './components/Chat/UserList'
 import GroupList from './components/Chat/GroupList'
-import EmailVerified from './pages/EmailVerified/EmailVerified'
-import VerificationEmailSent from './pages/VerificationEmailSent/VerificationEmailSent'
 
 const mockUsers = ['alice', 'bob', 'charlie', 'dave']
 const mockGroups = [
@@ -55,23 +60,27 @@ const App = () => {
       <Toggle handleChange = {toggleTheme} isChecked ={isLight}/>
       <Nav/>
       
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/contests' element={<Contests/>}/>
-        <Route path='/practice' element={<Questions/>}/>
-        <Route path='/practice/:titleSlug' element={<ProblemStatement/>}/>
-        <Route path='/bookmarks' element={<Bookmarks/>}/>
-        <Route path='/bookmarks/:titleSlug' element={<BookmarkedSolutions/>}/>
-        {/* <RequireAuth path='/bookmarks/:titleSlug' element={Bookmarks} isAuthenticated={isAuthenticated}/> */}
-        <Route path='/submissions' element={<Submissions/>}/>
-        <Route path='/submissions/:titleSlug' element={<SubmittedSolutions/>}/>
-        <Route path='/login' element={<Login/>}/> 
-        <Route path='/signup' element={<Signup />}/>
-        <Route path='/profile' element={<Profile/>}/>
-        <Route path='/chat' element={<ChatPage/>}/>
-        <Route path="/email-verified" element={<EmailVerified/>}/>
-        <Route path="/verification-email-sent" element={<VerificationEmailSent/>}/>
-      </Routes>
+      <Suspense fallback={<div className="loading">Loading page...</div>}>
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+          <Route path='/contests' element={<Contests/>}/>
+          <Route path='/practice' element={<Questions/>}/>
+          <Route path='/practice/:titleSlug' element={<ProblemStatement/>}/>
+          <Route path='/bookmarks' element={<Bookmarks/>}/>
+          <Route path='/bookmarks/:titleSlug' element={<BookmarkedSolutions/>}/>
+          {/* <RequireAuth path='/bookmarks/:titleSlug' element={Bookmarks} isAuthenticated={isAuthenticated}/> */}
+          <Route path='/submissions' element={<Submissions/>}/>
+          <Route path='/submissions/:titleSlug' element={<SubmittedSolutions/>}/>
+          <Route path='/submission/:submissionId' element={<SubmissionDetails/>}/>
+          <Route path='/leaderboard' element={<Leaderboard/>}/>
+          <Route path='/login' element={<Login/>}/> 
+          <Route path='/signup' element={<Signup />}/>
+          <Route path='/profile' element={<Profile/>}/>
+          <Route path='/chat' element={<ChatPage/>}/>
+          <Route path="/email-verified" element={<EmailVerified/>}/>
+          <Route path="/verification-email-sent" element={<VerificationEmailSent/>}/>
+        </Routes>
+      </Suspense>
       
       {/* Remove always-visible chat UI. Chat is now only accessible via /chat route. */}
       {/*

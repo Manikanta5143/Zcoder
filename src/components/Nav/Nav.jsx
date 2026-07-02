@@ -17,15 +17,18 @@ import {
 
 import { useLogout } from "../../hooks/useLogout";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useNotifications } from "../../hooks/useNotifications";
 
 import "./Nav.css";
 
 const Nav = () => {
   const { logout } = useLogout();
   const { isAuthenticated, user } = useAuthContext();
+  const { notifications, unreadCount, markAllAsRead } = useNotifications();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -96,15 +99,74 @@ const Nav = () => {
           {/* Notifications */}
 
           {isAuthenticated && (
-            <button className="icon-button notification-btn">
+            <div className="notification-container">
+              <button 
+                className="icon-button notification-btn"
+                onClick={() => {
+                  setNotifOpen(!notifOpen);
+                  setProfileOpen(false);
+                }}
+              >
+                <FaBell />
+                {unreadCount > 0 && (
+                  <span className="notification-dot">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
 
-              <FaBell />
+              {notifOpen && (
+                <div className="notification-menu">
+                  <div className="notification-header">
+                    <h3>Notifications</h3>
+                    {unreadCount > 0 && (
+                      <button className="mark-read-btn" onClick={markAllAsRead}>
+                        Mark all as read
+                      </button>
+                    )}
+                  </div>
+                  <ul className="notification-list">
+                    {notifications.length === 0 ? (
+                      <div className="notification-empty">No notifications yet.</div>
+                    ) : (
+                      notifications.map(notif => {
+                        let iconClass = 'accepted';
+                        let iconText = '🏆';
+                        if (notif.type === 'WrongAnswer') {
+                          iconClass = 'wronganswer';
+                          iconText = '❌';
+                        } else if (notif.type === 'Accepted') {
+                          iconClass = 'accepted';
+                          iconText = '✓';
+                        } else if (notif.type === 'Achievement') {
+                          iconClass = 'achievement';
+                          iconText = '⭐';
+                        }
 
-              <span className="notification-dot">
-                3
-              </span>
-
-            </button>
+                        return (
+                          <li 
+                            key={notif._id} 
+                            className={`notification-item ${!notif.read ? 'unread' : ''}`}
+                            onClick={() => setNotifOpen(false)}
+                          >
+                            <div className={`notification-item-icon ${iconClass}`}>
+                              {iconText}
+                            </div>
+                            <div className="notification-item-content">
+                              <span className="notification-item-title">{notif.title}</span>
+                              <span className="notification-item-desc">{notif.message}</span>
+                              <span className="notification-item-time">
+                                {new Date(notif.createdAt).toLocaleDateString()} {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+                          </li>
+                        );
+                      })
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
           )}
 
           {/* User */}

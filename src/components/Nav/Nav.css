@@ -874,3 +874,160 @@
     transform:rotate(-5deg) scale(1.05);
 
 }
+
+/* ==========================================
+   NOTIFICATIONS DROPDOWN MENU
+   ========================================== */
+
+.notification-container {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    width: 320px;
+    background: #111827;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(17,24,39,0.9);
+}
+
+.notification-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.mark-read-btn {
+    background: none;
+    border: none;
+    color: var(--primary-light);
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0;
+}
+
+.mark-read-btn:hover {
+    text-decoration: underline;
+}
+
+.notification-list {
+    max-height: 280px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.notification-item:hover {
+    background: #1f2937;
+}
+
+.notification-item.unread {
+    background: rgba(37,99,235,0.06);
+    border-left: 3px solid var(--primary);
+}
+
+.notification-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.notification-item-icon.accepted {
+    background: rgba(34,197,94,0.15);
+    color: #22c55e;
+}
+
+.notification-item-icon.wronganswer {
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+}
+
+.notification-item-icon.achievement {
+    background: rgba(245,158,11,0.15);
+    color: #f59e0b;
+}
+
+.notification-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.notification-item-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+
+.notification-item-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.notification-item-time {
+    font-size: 10px;
+    color: #64748b;
+}
+
+.notification-empty {
+    padding: 24px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: var(--danger);
+    color: white;
+    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #0B1120;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

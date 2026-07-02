@@ -1,79 +1,79 @@
-/* ===========================
-        TABLE
-=========================== */
+/* ==========================================
+            SUBMISSIONS TABLE CONTAINER
+========================================== */
 
-.table-wrapper{
-    width:100%;
-    overflow-x:auto;
-    border-radius:18px;
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  background-color: #0f172a;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.submission-table{
-    width:100%;
-    min-width:950px;
-    background:#1E293B;
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+.submission-table {
+  width: 100%;
+  min-width: 950px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ===========================
-        TABLE HEADER
-=========================== */
+/* ==========================================
+            TABLE HEADER ROW
+========================================== */
 
-.submission-table-header{
-
-    display:grid;
-
-    grid-template-columns:
-        130px
-        2.2fr
-        130px
-        150px
-        120px;
-
-    align-items:center;
-
-    background:#111827;
-
-    color:#94A3B8;
-
-    font-size:13px;
-
-    font-weight:600;
-
-    text-transform:uppercase;
-
-    letter-spacing:.8px;
-
-    padding:18px 24px;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-    position:sticky;
-
-    top:0;
-
-    z-index:5;
-
+.submission-table-header {
+  display: flex;
+  align-items: center;
+  background-color: #080d1a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 24px;
 }
 
-/* Small header hover effect */
-
-.submission-table-header div{
-
-    user-select:none;
-
+.sub-header-col {
+  display: flex;
+  align-items: center;
 }
-.no-submissions{
 
-    padding:40px;
+/* Grid columns matching widths */
+.col-submitted {
+  width: 16%;
+}
 
-    text-align:center;
+.col-problem {
+  width: 35%;
+}
 
-    color:#94A3B8;
+.col-difficulty {
+  width: 12%;
+  justify-content: center;
+}
 
-    font-size:16px;
+.col-result {
+  width: 14%;
+}
 
+.col-submissions {
+  width: 11%;
+  justify-content: center;
+}
+
+.col-actions {
+  width: 12%;
+  justify-content: flex-end;
+}
+
+.submission-table-header .sub-header-col span {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.sort-arrows {
+  margin-left: 6px;
+  color: #475569;
+  font-size: 12px;
+  user-select: none;
 }

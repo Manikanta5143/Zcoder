@@ -1,0 +1,194 @@
+/* ==========================================
+   SVG ANALYTICS CHARTS STYLES
+   ========================================== */
+
+.svg-chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+.svg-chart-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.svg-chart-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.svg-canvas {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ==========================================
+   AXIS LABELS
+   ========================================== */
+
+.chart-axis-label {
+  font-size: 9px;
+  font-weight: 500;
+  fill: #64748b;
+}
+
+.chart-axis-label.text-start {
+  text-anchor: start;
+}
+
+.chart-axis-label.text-end {
+  text-anchor: end;
+}
+
+.chart-axis-label.text-y {
+  text-anchor: end;
+}
+
+/* ==========================================
+   TOOLTIPS
+   ========================================== */
+
+.chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 50;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  min-width: 80px;
+  backdrop-filter: blur(8px);
+  animation: tooltipFade 0.15s ease-out;
+}
+
+.tooltip-lbl {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.tooltip-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+}
+
+@keyframes tooltipFade {
+  from { opacity: 0; transform: translate(-50%, -95%); }
+  to { opacity: 1; transform: translate(-50%, -100%); }
+}
+
+/* ==========================================
+   INTERACTIVE CIRCLES
+   ========================================== */
+
+.chart-interactive-group circle {
+  transition: r 0.2s, stroke-width 0.2s;
+}
+
+.chart-interactive-group:hover circle:first-child {
+  r: 7px;
+  stroke-width: 4px;
+}
+
+/* ==========================================
+   DOUGHNUT SPECIFICS
+   ========================================== */
+
+.doughnut-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.doughnut-svg-wrapper {
+  max-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doughnut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  max-width: 220px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.legend-item:hover,
+.legend-item.highlight {
+  background: rgba(30, 41, 59, 0.4);
+  border-color: var(--border);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 500;
+  flex-grow: 1;
+  text-transform: capitalize;
+}
+
+.legend-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  text-align: right;
+}
+
+/* ==========================================
+   EMPTY / ERROR STATES
+   ========================================== */
+
+.chart-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  color: #64748b;
+  font-size: 13px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  text-align: center;
+  padding: 20px;
+}

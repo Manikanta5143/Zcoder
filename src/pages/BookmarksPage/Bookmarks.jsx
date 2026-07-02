@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import TagFilter from '../../components/TagFilter/TagFilter';
-import Pagination from '../../components/Pagination/Pagination';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
+import { FiBookmark, FiTag, FiEye, FiTrash2, FiCalendar, FiSliders, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Bookmarks.css';
 import Loader from '../../components/Loader/Loader';
 
 const Bookmarks = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [bookmarkedQuestions, setBookmarkedQuestions] = useState([]);
-  // const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTags, setSelectedTags] = useState([]);
   const [redirectLoading, setRedirectLoading] = useState(false);
-  const questionsPerPage = 40;
+  const [questionsPerPage, setQuestionsPerPage] = useState(10);
   const { user, isAuthenticated } = useAuthContext();
-  // const [alertShown, setAlertShown] = useState(false);
   const [message, setMessage] = useState('');
-  // const [bookmarks, setBookmarks] = useState([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  console.log(user);
+  
+  // Frontend question metadata map
+  const [questionsMap, setQuestionsMap] = useState({});
 
   useEffect(() => {
     if (isAuthenticated && user && user._id) {
       fetchBookmarkedQuestions(user._id);
+      fetchQuestionsData();
     } else {
       if (!message) {
         setMessage('You need to be logged in to view this page.');
@@ -39,22 +38,39 @@ const Bookmarks = () => {
       }
     }
   }, [user, isAuthenticated]);
-  
+
+  const fetchQuestionsData = async () => {
+    try {
+      const res = await fetch('/api/questions?limit=500');
+      if (res.ok) {
+        const data = await res.json();
+        const qList = data.questions || [];
+        const qMap = {};
+        qList.forEach(q => {
+          qMap[q.titleSlug] = {
+            difficulty: q.difficulty,
+            description: q.description || ''
+          };
+        });
+        setQuestionsMap(qMap);
+      }
+    } catch (err) {
+      console.error('Error fetching questions map:', err);
+    }
+  };
 
   const fetchBookmarkedQuestions = async (userId) => {
     try {
       const response = await fetch(`/user/bookmarks/${userId}`);
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
         setBookmarkedQuestions(data);
-        
       } else {
         console.error('Failed to fetch bookmarked questions');
       }
     } catch (error) {
       console.error('Error fetching bookmarked questions', error);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -96,7 +112,6 @@ const Bookmarks = () => {
       });
       
       if (response.ok) {
-        // Remove the deleted bookmark from the state
         setBookmarkedQuestions(prevBookmarks => 
           prevBookmarks.filter(bookmark => bookmark.titleSlug !== itemToDelete.titleSlug)
         );
@@ -117,80 +132,280 @@ const Bookmarks = () => {
     setShowDeleteDialog(false);
     setItemToDelete(null);
   };
+
   if (redirectLoading) {
-  return (
-    <Loader
-      title="Login to view this page"
-      subtitle="Please wait while we take you to the login page."
-    />
-  );
-}
-  if(message){
-    return <div className='loading'>Login to view this page</div>;
+    return (
+      <Loader
+        title="Login to view this page"
+        subtitle="Please wait while we take you to the login page."
+      />
+    );
   }
+
+  if (message) {
+    return <div className='loading-screen'>Login to view this page</div>;
+  }
+
   if (loading && !message) {
-    return <div className='loading'>Loading...</div>;
+    return <div className='loading-screen'>Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className='error-screen'>{error}</div>;
   }
 
   const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
-  if (redirectLoading) {
-  return (
-    <Loader
-      title="Redirecting..."
-      subtitle="Please wait while we take you to the login page."
-    />
-  );
-}
 
   return (
-    <>
-    <div className='questions-list'>
-        { loading && message && <p>{message}</p>}
-      <TagFilter tags={allTags} selectedTags={selectedTags} onTagChange={handleTagChange} />
+    <div className="bookmarks-page-container">
+      {/* 1. Breadcrumbs & Header */}
+      <div className="bookmarks-header-section">
+        <div className="header-left">
+          <div className="bookmark-icon-box">
+            <FiBookmark className="bookmark-header-icon" />
+          </div>
+          <div className="title-stack">
+            <h1>My Bookmarks</h1>
+            <p>Your saved problems to revise and solve later</p>
+          </div>
+        </div>
+        <div className="header-right">
+          <span className="bookmarks-breadcrumbs">
+            Dashboard <span className="caret">&gt;</span> <span className="current">Bookmarks</span>
+          </span>
+        </div>
+      </div>
 
-      {currentQuestions.length === 0 && (
-        <div style={{ textAlign: 'center', color: '#888', fontSize: '1.3rem', fontWeight: 600, margin: '32px 0' }}>
-          No Bookmarks
+      {/* 2. Statistics Dashboard Cards */}
+      <div className="bookmarks-dashboard-row">
+        <div className="stats-card bookmark-card">
+          <div className="stats-icon-box bookmark-bg">
+            <FiBookmark className="stats-icon text-blue" />
+          </div>
+          <div className="stats-info">
+            <span className="stats-label">Total Bookmarks</span>
+            <span className="stats-value">{bookmarkedQuestions.length}</span>
+            <span className="stats-sub">Problems saved</span>
+          </div>
+        </div>
+
+        <div className="stats-card topic-card">
+          <div className="stats-icon-box topic-bg">
+            <FiTag className="stats-icon text-green" />
+          </div>
+          <div className="stats-info">
+            <span className="stats-label">Topics Covered</span>
+            <span className="stats-value">{allTags.length}</span>
+            <span className="stats-sub">Different topics</span>
+          </div>
+        </div>
+
+        <div className="stats-card results-card">
+          <div className="stats-icon-box results-bg">
+            <FiEye className="stats-icon text-teal" />
+          </div>
+          <div className="stats-info">
+            <span className="stats-label">Showing Results</span>
+            <span className="stats-value">
+              {filteredQuestions.length === 0 ? '0' : `${indexOfFirstQuestion + 1}-${Math.min(indexOfLastQuestion, filteredQuestions.length)}`}
+            </span>
+            <span className="stats-sub">of {bookmarkedQuestions.length} bookmarks</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Tag Filter Pill row */}
+      <div className="bookmarks-filter-pills-row">
+        <div className="pills-scroll-container">
+          <button
+            className={`filter-pill-btn ${selectedTags.length === 0 ? 'active' : ''}`}
+            onClick={() => { setSelectedTags([]); setCurrentPage(1); }}
+          >
+            All Topics
+          </button>
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              className={`filter-pill-btn ${selectedTags.includes(tag) ? 'active' : ''}`}
+              onClick={() => handleTagChange(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+        <button className="settings-filter-btn">
+          <FiSliders className="settings-icon" />
+          <span>Filters</span>
+        </button>
+      </div>
+
+      {/* 4. Main Table */}
+      <div className="bookmarks-table-wrapper">
+        <div className="bookmarks-table">
+          <div className="table-row table-header">
+            <div className="table-col col-date-header">
+              <span>Date Saved</span>
+              <span className="sort-arrows">⇅</span>
+            </div>
+            <div className="table-col col-problem-header">
+              <span>Problem</span>
+              <span className="sort-arrows">⇅</span>
+            </div>
+            <div className="table-col col-diff-header">
+              <span>Difficulty</span>
+              <span className="sort-arrows">⇅</span>
+            </div>
+            <div className="table-col col-tags-header">
+              <span>Tags</span>
+              <span className="sort-arrows">⇅</span>
+            </div>
+            <div className="table-col col-actions-header">Actions</div>
+          </div>
+
+          {currentQuestions.length === 0 ? (
+            <div className="bookmarks-empty-state">
+              <div className="empty-icon-box">
+                <FiBookmark className="empty-icon" />
+              </div>
+              <h3>No Bookmarks Yet</h3>
+              <p>You haven't bookmarked any coding problems. Browse the Practice page to save problems to solve later.</p>
+              <Link to="/practice" className="explore-problems-btn">
+                Browse Practice Problems
+              </Link>
+            </div>
+          ) : (
+            currentQuestions.map((question) => {
+              const qInfo = questionsMap[question.titleSlug] || {
+                difficulty: 'Easy',
+                description: 'Given a problem, implement a solution to pass all constraints.'
+              };
+              
+              const dateObj = new Date(question.createdAt);
+              const dateStr = dateObj.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+              const timeStr = dateObj.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+
+              return (
+                <div key={question._id} className="table-row problem-item-row">
+                  {/* Date Saved */}
+                  <div className="table-col col-date">
+                    <FiCalendar className="row-calendar-icon" />
+                    <div className="date-vertical-stack">
+                      <span className="main-date-txt">{dateStr}</span>
+                      <span className="sub-time-txt">{timeStr}</span>
+                    </div>
+                  </div>
+
+                  {/* Problem Name & Description */}
+                  <div className="table-col col-problem">
+                    <Link to={`/bookmarks/${question.titleSlug}`} className="row-problem-title">
+                      {question.title}
+                    </Link>
+                    <span className="row-problem-desc">
+                      {qInfo.description.replace(/<[^>]*>/g, '').substring(0, 90) + (qInfo.description.length > 90 ? '...' : '')}
+                    </span>
+                  </div>
+
+                  {/* Difficulty */}
+                  <div className="table-col col-diff">
+                    <span className={`diff-badge-outline ${qInfo.difficulty.toLowerCase()}`}>
+                      {qInfo.difficulty}
+                    </span>
+                  </div>
+
+                  {/* Tags */}
+                  <div className="table-col col-tags">
+                    <div className="row-tags-list">
+                      {question.topicTags.slice(0, 2).map((tag, idx) => (
+                        <span key={idx} className="row-tag-item">
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="table-col col-actions">
+                    <Link to={`/bookmarks/${question.titleSlug}`} className="action-circle-btn view-btn-circle" title="View Details">
+                      <FiEye />
+                    </Link>
+                    <button
+                      className="action-circle-btn delete-btn-circle"
+                      onClick={() => handleDeleteBookmark(question.titleSlug)}
+                      title="Delete Bookmark"
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {/* 5. Custom Pagination Footer Row */}
+      {filteredQuestions.length > 0 && (
+        <div className="bookmarks-footer-pagination-bar">
+          <div className="pagination-text-info">
+            Showing {indexOfFirstQuestion + 1} to {Math.min(indexOfLastQuestion, filteredQuestions.length)} of {filteredQuestions.length} bookmarks
+          </div>
+
+          <div className="pagination-controls-pills">
+            <button
+              className="arrow-pill-btn"
+              disabled={currentPage === 1}
+              onClick={() => paginate(currentPage - 1)}
+            >
+              <FiChevronLeft />
+            </button>
+            
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                className={`page-pill-btn ${currentPage === page ? 'active' : ''}`}
+                onClick={() => paginate(page)}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              className="arrow-pill-btn"
+              disabled={currentPage === totalPages}
+              onClick={() => paginate(currentPage + 1)}
+            >
+              <FiChevronRight />
+            </button>
+          </div>
+
+          <div className="pagination-select-page-size">
+            <select
+              value={questionsPerPage}
+              onChange={(e) => {
+                setQuestionsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="page-size-selector"
+            >
+              <option value={10}>10 per page</option>
+              <option value={20}>20 per page</option>
+              <option value={50}>50 per page</option>
+            </select>
+          </div>
         </div>
       )}
 
-      {currentQuestions.map((question) => (
-        <div key={question._id} className="bookmark-bubble">
-          <Link to={`/bookmarks/${question.titleSlug}`} className="bookmark-bubble-title">
-            {question.title}
-          </Link>
-          <div className="bookmark-bubble-tags">
-            {question.topicTags.map((tag, tagIndex) => (
-              <span key={tagIndex} className="tag">{tag.name}</span>
-            ))}
-          </div>
-          <button 
-            className="delete-btn" 
-            onClick={() => handleDeleteBookmark(question.titleSlug)}
-          >
-            Delete
-          </button>
-        </div>
-      ))}
-      
+      {/* 6. Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showDeleteDialog}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        title="Delete Bookmark"
+        message="Are you sure you want to delete this bookmark? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
     </div>
-
-    <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
-    
-    <ConfirmationDialog
-      isOpen={showDeleteDialog}
-      onConfirm={confirmDelete}
-      onCancel={cancelDelete}
-      title="Delete Bookmark"
-      message="Are you sure you want to delete this bookmark? This action cannot be undone."
-      confirmText="Delete"
-      cancelText="Cancel"
-    />
-  </>
   );
 };
 

@@ -1,97 +1,605 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
+/* ==========================================
+            BOOKMARKS MAIN WRAPPER
+========================================== */
 
-@keyframes bookmarkPop {
-  0% { transform: scale(0.95); opacity: 0.5; }
-  60% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.bookmarks{
+.bookmarks-page-container {
+  width: 100%;
+  padding: 30px 40px;
+  background-color: #0b0f19;
+  min-height: calc(100vh - 65px);
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 100vh;
+  gap: 24px;
 }
 
-.solution-container{
-  width: 650px;
+@media (max-width: 768px) {
+  .bookmarks-page-container {
+    padding: 20px 24px;
+  }
 }
 
-.bookmark-bubble {
-  background: linear-gradient(135deg, #10478b 0%, #185a9d 100%);
-  color: #fff;
-  border-radius: 28px;
-  box-shadow: 0 8px 32px rgba(24,90,157,0.12);
-  padding: 28px 32px;
-  margin: 28px 0;
-  animation: bookmarkPop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-size: 1.15rem;
-  position: relative;
-  overflow: hidden;
+/* ==========================================
+            BREADCRUMBS & HEADER
+========================================== */
+
+.bookmarks-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 20px;
 }
-.bookmark-bubble-title {
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color:rgb(255, 255, 255);
-  margin-bottom: 10px;
-  letter-spacing: 0.04em;
-  text-shadow: 0 2px 8px rgba(24,90,157,0.10);
-  display: block;
-  text-decoration: none;
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
-.bookmark-bubble-tags {
-  margin-top: 10px;
-}
-.bookmark-bubble-tags .tag {
-  background: #7938c8;
-  color: #ffffff;
+
+.bookmark-icon-box {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
   border-radius: 12px;
-  padding: 4px 14px;
-  margin-right: 8px;
-  font-size: 1rem;
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 8px rgba(255,210,0,0.10);
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.delete-btn {
-  background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
-  color: white;
-  border: none;
-  padding: 10px 20px;
+.bookmark-header-icon {
+  font-size: 22px;
+  color: #3b82f6;
+}
+
+.title-stack h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.title-stack p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 4px 0 0 0;
+}
+
+.bookmarks-breadcrumbs {
+  font-size: 12px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bookmarks-breadcrumbs .caret {
+  color: #475569;
+}
+
+.bookmarks-breadcrumbs .current {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* ==========================================
+            DASHBOARD STATS CARDS
+========================================== */
+
+.bookmarks-dashboard-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.stats-card {
+  background-color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.stats-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-icon {
+  font-size: 22px;
+}
+
+.bookmark-bg {
+  background-color: rgba(59, 130, 246, 0.08);
+}
+.topic-bg {
+  background-color: rgba(16, 185, 129, 0.08);
+}
+.results-bg {
+  background-color: rgba(6, 182, 212, 0.08);
+}
+
+.text-blue { color: #3b82f6; }
+.text-green { color: #10b981; }
+.text-teal { color: #06b6d4; }
+
+.stats-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-label {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 2px 0;
+}
+
+.stats-sub {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ==========================================
+            TAG FILTER PILLS ROW
+========================================== */
+
+.bookmarks-filter-pills-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 16px;
+}
+
+.pills-scroll-container {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.pills-scroll-container::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+}
+
+.filter-pill-btn {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
+  color: #94a3b8;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.filter-pill-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.filter-pill-btn.active {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.settings-filter-btn {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #94a3b8;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.settings-filter-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.settings-icon {
+  font-size: 14px;
+}
+
+/* ==========================================
+            TABLE LAYOUT SYSTEM
+========================================== */
+
+.bookmarks-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  background-color: #0f172a;
+}
+
+.bookmarks-table {
+  width: 100%;
+  min-width: 900px;
+}
+
+.table-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table-row.table-header {
+  background-color: #080d1a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 20px;
+}
+
+.problem-item-row {
+  transition: background-color 0.2s ease;
+  min-height: 56px;
+}
+
+.problem-item-row:hover {
+  background-color: #172033;
+}
+
+.problem-item-row:last-child {
+  border-bottom: none;
+}
+
+/* Columns Partitioning */
+.table-col {
+  display: flex;
+  align-items: center;
+}
+
+.col-date-header, .col-date {
+  width: 15%;
+}
+
+.col-problem-header, .col-problem {
+  width: 45%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.col-diff-header, .col-diff {
+  width: 12%;
+  justify-content: center;
+}
+
+.col-tags-header, .col-tags {
+  width: 16%;
+}
+
+.col-actions-header, .col-actions {
+  width: 12%;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Header Text Styles */
+.table-header .table-col span {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.sort-arrows {
+  margin-left: 6px;
+  color: #475569;
+  font-size: 12px;
+  user-select: none;
+}
+
+/* Row elements detail styling */
+.row-calendar-icon {
+  font-size: 15px;
+  color: #475569;
+  margin-right: 10px;
+}
+
+.date-vertical-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-date-txt {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.sub-time-txt {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.row-problem-title {
   font-size: 14px;
   font-weight: 600;
-  font-family: 'Montserrat', Arial, sans-serif;
-  margin-top: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
-  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.delete-btn:hover {
-  background: linear-gradient(135deg, #ff6666 0%, #dd2222 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 68, 68, 0.4);
+.row-problem-title:hover {
+  color: #3b82f6;
 }
 
-.delete-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(255, 68, 68, 0.3);
+.row-problem-desc {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 95%;
 }
 
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Difficulty badges outlines */
+.diff-badge-outline {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.diff-badge-outline.easy {
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  background-color: rgba(16, 185, 129, 0.05);
+  color: #10b981;
+}
+
+.diff-badge-outline.medium {
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  background-color: rgba(245, 158, 11, 0.05);
+  color: #f59e0b;
+}
+
+.diff-badge-outline.hard {
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background-color: rgba(239, 68, 68, 0.05);
+  color: #ef4444;
+}
+
+/* Tag Pills */
+.row-tags-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.row-tag-item {
+  background-color: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Circle Action Buttons */
+.action-circle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.view-btn-circle {
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+}
+
+.view-btn-circle:hover {
+  background-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.delete-btn-circle {
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.delete-btn-circle:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+/* ==========================================
+            EMPTY STATE
+========================================== */
+
+.bookmarks-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.empty-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.empty-icon {
+  font-size: 26px;
+  color: #475569;
+}
+
+.bookmarks-empty-state h3 {
+  font-size: 18px;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.bookmarks-empty-state p {
+  font-size: 13px;
+  color: #64748b;
+  max-width: 420px;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.explore-problems-btn {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.explore-problems-btn:hover {
+  background-color: #3b82f6;
+}
+
+/* ==========================================
+            PAGINATION FOOTER ROW
+========================================== */
+
+.bookmarks-footer-pagination-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pagination-text-info {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.pagination-controls-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-pill-btn, .arrow-pill-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: transparent;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.page-pill-btn:hover, .arrow-pill-btn:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.page-pill-btn.active {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.arrow-pill-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-size-selector {
+  background-color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #94a3b8;
+  padding: 6px 12px;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.page-size-selector:focus {
+  border-color: #2563eb;
+}
+
+/* ==========================================
+            LOADING / ERROR SCREENS
+========================================== */
+
+.loading-screen, .error-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+  font-size: 16px;
+  color: #94a3b8;
+  background-color: #0b0f19;
+}
+
+.error-screen {
+  color: #ef4444;
+  font-weight: 600;
 }

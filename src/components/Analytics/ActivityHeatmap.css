@@ -1,0 +1,186 @@
+/* ==========================================
+   ACTIVITY HEATMAP CALENDAR STYLES
+   ========================================== */
+
+.activity-heatmap-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: visible;
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.heatmap-header h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.heatmap-header .subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.heatmap-controls {
+  display: flex;
+  gap: 6px;
+  background: #0f172a;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.control-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.control-btn.total.active {
+  background: rgba(22, 163, 74, 0.15);
+  color: #4ade80;
+}
+
+.control-btn.accepted.active {
+  background: rgba(37, 99, 235, 0.15);
+  color: #60a5fa;
+}
+
+.control-btn.failed.active {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+/* ==========================================
+   HEATMAP GRID AREA
+   ========================================== */
+
+.heatmap-viewport-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+/* Custom scrollbar for horizontal scrolling on desktop/mobile */
+.heatmap-viewport-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.heatmap-viewport-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.heatmap-svg-container {
+  min-width: 720px;
+  position: relative;
+  overflow: visible;
+}
+
+.heatmap-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.heatmap-text {
+  font-size: 9px;
+  font-weight: 500;
+  fill: #64748b;
+}
+
+.heatmap-cell {
+  stroke: rgba(11, 17, 32, 0.5);
+  stroke-width: 0.5px;
+  transition: transform 0.1s, stroke 0.1s;
+  transform-origin: center;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.15);
+  stroke: white;
+  stroke-width: 1px;
+  z-index: 100;
+}
+
+/* ==========================================
+   TOOLTIP OVER GRID
+   ========================================== */
+
+.heatmap-tooltip {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 200;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  min-width: 130px;
+  backdrop-filter: blur(8px);
+  animation: tooltipFade 0.15s ease-out;
+}
+
+.heatmap-tooltip strong {
+  font-size: 11px;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.heatmap-tooltip span {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+/* ==========================================
+   LEGEND STANDS
+   ========================================== */
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.legend-blocks {
+  display: flex;
+  gap: 3px;
+}
+
+.legend-block {
+  width: 10px;
+  height: 10px;
+  border-radius: 1.5px;
+}
